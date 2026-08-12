@@ -2,645 +2,208 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Danilah Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danilah</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
         body {
             background: #0a0a12;
-            color: #e2e2e8;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            touch-action: manipulation;
-        }
-
-        .app {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .screen {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            min-height: 100vh;
-        }
-        .screen.on {
-            display: flex;
-        }
-
-        .header {
-            background: linear-gradient(180deg, #1a0f2e, #0f0820);
-            padding: 20px 16px;
-            text-align: center;
-            border-bottom: 2px solid #8b5cf6;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 3px;
-            background: linear-gradient(to right, #c084fc, #e9a5d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .tag {
-            font-size: 10px;
-            color: #9ca3af;
-            letter-spacing: 3px;
-            margin-top: 2px;
-        }
-
-        .content {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ====== ПРИВЕТСТВИЕ ====== */
-        .welcome-wrap {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
             padding: 20px;
-        }
-
-        .welcome-icon {
-            font-size: 80px;
-            margin-bottom: 24px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.06); }
-        }
-
-        .welcome-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #e2e2e8;
-        }
-
-        .welcome-desc {
-            font-size: 14px;
-            color: #9ca3af;
-            line-height: 1.5;
-            margin-bottom: 32px;
-            max-width: 300px;
-        }
-
-        .btn-start {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
-            transition: all 0.2s;
-        }
-
-        .btn-start:active {
-            opacity: 0.7;
-            transform: scale(0.96);
-        }
-
-        /* ====== ВЫБОР ВХОДА ====== */
-        .choice-wrap {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .choice-title {
-            font-size: 20px;
-            font-weight: 700;
             text-align: center;
-            margin-bottom: 24px;
-            color: #e2e2e8;
         }
-
-        .choice-btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-            transition: all 0.2s;
-        }
-
-        .choice-btn:active {
-            opacity: 0.7;
-            transform: scale(0.97);
-        }
-
-        .choice-btn.phone {
-            background: #7c3aed;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-        }
-
-        .choice-btn.code {
-            background: transparent;
-            border: 2px solid #8b5cf6;
-            color: #8b5cf6;
-        }
-
-        .choice-hint {
-            text-align: center;
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-            line-height: 1.4;
-        }
-
-        /* ====== ОБЩИЕ ====== */
-        .card {
-            background: #141420;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #252538;
-        }
-
-        input {
-            width: 100%;
-            padding: 16px;
-            margin: 8px 0;
-            background: #0d0d18;
-            border: 2px solid #252538;
-            border-radius: 14px;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        input:focus {
-            border-color: #8b5cf6;
-        }
-
+        .screen { display: none; }
+        .screen.active { display: block; }
+        
         button {
             display: block;
             width: 100%;
             padding: 16px;
             margin: 10px 0;
+            font-size: 18px;
             border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-            position: relative;
-            z-index: 5;
-        }
-
-        button:active {
-            opacity: 0.7;
-            transform: scale(0.97);
-        }
-
-        .b1 {
-            background: #7c3aed;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
-        }
-        .b2 {
-            background: transparent;
-            border: 2px solid #8b5cf6;
-            color: #8b5cf6;
-        }
-        .b3 {
-            background: #f59e0b;
-            color: #000;
-        }
-        .b4 {
-            background: #06b6d4;
-            color: #000;
-        }
-        .b5 {
-            background: #ef4444;
-            color: #fff;
-        }
-        .b6 {
-            background: transparent;
-            border: 1px solid #333;
-            color: #9ca3af;
-            font-size: 14px;
-            padding: 12px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 14px;
-            font-size: 11px;
-            font-weight: 600;
-            margin: 2px;
-        }
-        .bd1 {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-        .bd2 {
-            background: rgba(6, 182, 212, 0.2);
-            color: #06b6d4;
-        }
-
-        .av {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #7c3aed;
-            margin: 0 auto 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            z-index: 5;
-        }
-        .av img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .av:active {
-            opacity: 0.7;
-        }
-
-        .err {
-            color: #ef4444;
-            font-size: 13px;
-            margin: 6px 0;
-        }
-        .ok {
-            color: #22c55e;
-            font-size: 13px;
-            margin: 6px 0;
-        }
-        .center {
-            text-align: center;
-        }
-        .small {
-            font-size: 13px;
-            color: #9ca3af;
-        }
-
-        .msg-box {
-            border: 1px solid #252538;
-            border-radius: 14px;
-            padding: 12px;
-            max-height: 280px;
-            overflow-y: auto;
-            margin: 8px 0;
-            background: #0d0d18;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .msg {
-            padding: 10px 14px;
-            border-radius: 16px;
-            margin: 6px 0;
-            font-size: 14px;
-            max-width: 82%;
-            word-break: break-word;
-        }
-        .msg.sent {
-            background: #7c3aed;
-            color: #fff;
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-        }
-        .msg.rec {
-            background: #1a1a28;
-            border: 1px solid #252538;
-            border-bottom-left-radius: 4px;
-        }
-        .msg .snd {
-            font-size: 10px;
-            color: #a78bfa;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-        .msg .tm {
-            font-size: 9px;
-            opacity: 0.5;
-            text-align: right;
-            margin-top: 4px;
-        }
-
-        .chat-row {
-            display: flex;
-            gap: 8px;
-        }
-        .chat-row input {
-            flex: 1;
-        }
-        .chat-row button {
-            width: auto;
-            padding: 16px 24px;
-            margin: 0;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 12px;
-            background: #0d0d18;
-            border-radius: 14px;
-            padding: 4px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px 6px;
-            text-align: center;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 12px;
-            background: transparent;
-            color: #9ca3af;
-            border: none;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-            position: relative;
-            z-index: 5;
         }
-        .tab.on {
-            background: #7c3aed;
-            color: #fff;
-        }
-        .tab:active {
-            opacity: 0.7;
-        }
-
-        .user-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 14px;
-            cursor: pointer;
-            margin: 4px 0;
-            touch-action: manipulation;
-            position: relative;
-            z-index: 5;
-        }
-        .user-row:active {
-            background: rgba(139, 92, 246, 0.15);
-        }
-
-        .uav {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #7c3aed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 17px;
-            font-weight: bold;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .uav img {
+        .btn-purple { background: #7c3aed; color: white; }
+        .btn-outline { background: transparent; border: 2px solid #8b5cf6; color: #8b5cf6; }
+        .btn-gold { background: #f59e0b; color: black; }
+        .btn-red { background: #ef4444; color: white; }
+        
+        input {
+            display: block;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1f1f30;
-            color: #fff;
-            padding: 14px 24px;
-            border-radius: 22px;
-            font-size: 14px;
-            z-index: 100;
+            padding: 14px;
+            margin: 8px 0;
+            background: #111;
             border: 1px solid #333;
-            pointer-events: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px;
         }
-
-        .hint-text {
-            font-size: 11px;
-            color: #6b7280;
-            text-align: center;
-            margin-top: 2px;
-            line-height: 1.4;
+        .card {
+            background: #1a1a28;
+            padding: 16px;
+            border-radius: 14px;
+            margin: 12px 0;
+            text-align: left;
         }
+        .small { font-size: 12px; color: #999; }
+        .err { color: #ef4444; font-size: 14px; }
+        .ok { color: #22c55e; font-size: 14px; }
+        h1 { color: #a78bfa; }
     </style>
 </head>
 <body>
 
-    <div class="app" id="app">
+    <!-- ЭКРАН 1: ПРИВЕТСТВИЕ -->
+    <div id="screen1" class="screen active">
+        <h1>DANILAH</h1>
+        <p>Добро пожаловать</p>
+        <button class="btn-purple" onclick="showScreen('screen2')">🚀 Начать</button>
+    </div>
 
-        <!-- ====== 1. ПРИВЕТСТВИЕ ====== -->
-        <div class="screen on" id="wel">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Elite Messenger</div>
-            </div>
-            <div class="welcome-wrap">
-                <div class="welcome-icon">🔐</div>
-                <div class="welcome-title">Добро пожаловать в Danilah</div>
-                <div class="welcome-desc">Закрытая экосистема для избранных. Безопасное общение без лишних глаз.</div>
-                <button class="btn-start" ontouchstart="" onclick="go('choice')">🚀 Начать</button>
-            </div>
+    <!-- ЭКРАН 2: ВЫБОР ВХОДА -->
+    <div id="screen2" class="screen">
+        <h1>DANILAH</h1>
+        <p>Выберите способ входа</p>
+        <button class="btn-purple" onclick="showScreen('screen3')">📱 Войти по номеру телефона</button>
+        <p class="small">Быстрый вход через SMS-код</p>
+        <button class="btn-outline" onclick="showScreen('screen4')">🔐 Войти по коду</button>
+        <p class="small">Займет больше времени, чем кодом</p>
+    </div>
+
+    <!-- ЭКРАН 3: ВХОД ПО ТЕЛЕФОНУ -->
+    <div id="screen3" class="screen">
+        <h1>DANILAH</h1>
+        <div class="card">
+            <p>📱 Номер телефона</p>
+            <input type="tel" id="phone" placeholder="+7 999 123-45-67">
+            <button class="btn-purple" onclick="phoneLogin()">Получить код</button>
+            <p class="err" id="phoneErr"></p>
+            <p class="ok" id="phoneOk"></p>
         </div>
+        <button class="btn-outline" onclick="showScreen('screen2')">← Назад</button>
+    </div>
 
-        <!-- ====== 2. ВЫБОР ВХОДА ====== -->
-        <div class="screen" id="choice">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Вход в систему</div>
-            </div>
-            <div class="choice-wrap">
-                <div class="choice-title">Выберите способ входа</div>
-
-                <button class="choice-btn phone" ontouchstart="" onclick="go('phoneLogin')">
-                    📱 Войти по номеру телефона
-                </button>
-                <p class="hint-text" style="margin-bottom:16px;">Быстрый вход через SMS-код</p>
-
-                <button class="choice-btn code" ontouchstart="" onclick="go('codeLogin')">
-                    🔐 Войти по коду
-                </button>
-                <p class="hint-text">Займет больше времени, чем кодом</p>
-            </div>
+    <!-- ЭКРАН 4: ВХОД ПО КОДУ -->
+    <div id="screen4" class="screen">
+        <h1>DANILAH</h1>
+        <div class="card">
+            <p>🔐 Авторизация</p>
+            <input type="text" id="username" placeholder="@Username">
+            <input type="password" id="password" placeholder="Код-пароль">
+            <button class="btn-purple" onclick="codeLogin()">Войти</button>
+            <p class="err" id="loginErr"></p>
         </div>
+        <button class="btn-outline" onclick="showScreen('screen2')">← Назад</button>
+    </div>
 
-        <!-- ====== 3. ВХОД ПО НОМЕРУ ТЕЛЕФОНА ====== -->
-        <div class="screen" id="phoneLogin">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Вход по номеру</div>
-            </div>
-            <div class="content">
-                <div class="card">
-                    <h3 style="color:#8b5cf6;margin-bottom:12px;">📱 Номер телефона</h3>
-                    <p class="small" style="margin-bottom:12px;">Введите ваш номер телефона для входа</p>
-                    <input type="tel" id="phoneNumber" placeholder="+7 (999) 123-45-67" autocomplete="off">
-                    <button class="b1" ontouchstart="" onclick="phoneLogin()">Получить код</button>
-                    <p class="err" id="phoneErr"></p>
-                    <p class="ok" id="phoneOk"></p>
-                </div>
-                <button class="b6" ontouchstart="" onclick="go('choice')">← Назад к выбору</button>
-            </div>
+    <!-- ЭКРАН 5: ПРОФИЛЬ -->
+    <div id="screen5" class="screen">
+        <h1>DANILAH</h1>
+        <div class="card">
+            <h2 id="profName">Имя</h2>
+            <p id="profUsername">@user</p>
         </div>
+        <button class="btn-outline" onclick="showScreen('screen6')">💬 Сообщения</button>
+        <button class="btn-gold" onclick="activateCode()">🎫 Активировать код</button>
+        <button class="btn-red" onclick="logout()">🚪 Выйти</button>
+    </div>
 
-        <!-- ====== 4. ВХОД ПО КОДУ ====== -->
-        <div class="screen" id="codeLogin">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Вход по коду</div>
-            </div>
-            <div class="content">
-                <div class="card">
-                    <h3 style="color:#8b5cf6;margin-bottom:12px;">🔐 Авторизация</h3>
-                    <input type="text" id="lun" placeholder="@Username" autocomplete="off">
-                    <input type="password" id="lps" placeholder="Код-пароль">
-                    <button class="b1" ontouchstart="" onclick="codeLogin()">Войти</button>
-                    <p class="err" id="lerr"></p>
-                </div>
-                <button class="b6" ontouchstart="" onclick="go('choice')">← Назад к выбору</button>
-            </div>
+    <!-- ЭКРАН 6: ЧАТ -->
+    <div id="screen6" class="screen">
+        <h1>DANILAH</h1>
+        <div class="card" id="chatBox" style="height:200px;overflow-y:auto;">
+            <p class="small">Чат</p>
         </div>
+        <input type="text" id="msgInput" placeholder="Сообщение...">
+        <button class="btn-purple" onclick="sendMsg()">Отправить</button>
+        <button class="btn-outline" onclick="showScreen('screen5')">← Назад</button>
+    </div>
 
-        <!-- ====== ЗАЯВКА ====== -->
-        <div class="screen" id="apply">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Заявка на доступ</div>
-            </div>
-            <div class="content">
-                <div class="card">
-                    <h3 style="color:#8b5cf6;margin-bottom:12px;">🆘 Запросить доступ</h3>
-                    <p class="small" style="margin-bottom:10px;">@Durov выдаст вам код доступа</p>
-                    <input type="text" id="anm" placeholder="Ваше имя" autocomplete="off">
-                    <input type="text" id="aun" placeholder="Желаемый @Username" autocomplete="off">
-                    <button class="b1" ontouchstart="" onclick="doApply()">Отправить заявку</button>
-                    <p class="ok" id="aok"></p>
-                    <p class="err" id="aerr"></p>
-                </div>
-                <button class="b6" ontouchstart="" onclick="go('choice')">← Назад</button>
-            </div>
-        </div>
+    <script>
+        // БАЗА
+        var db = JSON.parse(localStorage.getItem('db')) || {
+            users: [{ id: 'o1', name: 'Владелец', username: '@Durov', password: 'admin123', role: 'owner', status: 'premium',
+                verified: true }
+            ],
+            msgs: [],
+            code: 'QQO1098'
+        };
 
-        <!-- ====== ПРОФИЛЬ ====== -->
-        <div class="screen" id="prof">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Профиль</div>
-            </div>
-            <div class="content">
-                <div class="card center">
-                    <div class="av" id="pav" ontouchstart="" onclick="upAv()">?</div>
-                    <input type="file" id="afi" accept="image/*" style="display:none" onchange="doUpAv()">
-                    <h2 id="pnm" style="margin-bottom:4px;">Имя</h2>
-                    <p id="pun" style="color:#9ca3af;margin-bottom:8px;">@user</p>
-                    <div id="pbd"></div>
-                    <p class="small" id="pbio" style="margin-top:6px;"></p>
-                </div>
-                <button class="b2" ontouchstart="" onclick="upAv()">🖼 Аватарка</button>
-                <button class="b2" ontouchstart="" onclick="editBio()">✏️ Статус</button>
-                <button class="b2" ontouchstart="" onclick="go('chat')">💬 Сообщения</button>
-                <button class="b4" id="pcr" ontouchstart="" onclick="alert('Только для Premium 💎')">➕ Создать чат</button>
-                <button class="b3" ontouchstart="" onclick="actCode()">🎫 Активировать код</button>
-                <button class="b2" ontouchstart="" onclick="supChat()">📞 Поддержка</button>
-                <button class="b2" ontouchstart="" onclick="alert('💎 Danilah Premium — свяжитесь с @Durov')">💎 Хочу Premium</button>
-                <div id="admBtn"></div>
-                <button class="b5" ontouchstart="" onclick="logout()">🚪 Выйти</button>
-            </div>
-        </div>
+        function save() { localStorage.setItem('db', JSON.stringify(db)); }
 
-        <!-- ====== ЧАТ ====== -->
-        <div class="screen" id="chat">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">Сообщения</div>
-            </div>
-            <div class="content" style="display:flex;flex-direction:column;">
-                <input type="text" id="csrc" placeholder="🔍 Поиск по @Username..." oninput="srcChat()" autocomplete="off">
-                <div id="culist" style="max-height:120px;overflow-y:auto;"></div>
-                <div class="msg-box" id="cmsg"><div class="small center">Выберите собеседника</div></div>
-                <div class="chat-row">
-                    <input type="text" id="cminp" placeholder="Сообщение...">
-                    <button class="b1" ontouchstart="" onclick="sendMsg()">➤</button>
-                </div>
-                <button class="b6" ontouchstart="" onclick="go('prof')" style="margin-top:8px;">← Назад</button>
-            </div>
-        </div>
+        function showScreen(id) {
+            var screens = document.querySelectorAll('.screen');
+            for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+            document.getElementById(id).classList.add('active');
+        }
 
-        <!-- ====== АДМИН ====== -->
-        <div class="screen" id="admin">
-            <div class="header">
-                <div class="logo">DANILAH</div>
-                <div class="tag">👑 Админ</div>
-            </div>
-            <div class="content">
-                <div class="tabs">
-                    <button class="tab on" ontouchstart="" onclick="admTab('apps')">📋 Заявки</button>
-                    <button class="tab" ontouchstart="" onclick="admTab('users')">👥 Люди</button>
-                    <button class="tab" ontouchstart="" onclick="admTab('codes')">🔑 Коды</button>
-                </div>
-                <div id="admContent"></div>
-                <button class="b6" on                                    
+        // ВХОД ПО ТЕЛЕФОНУ
+        function phoneLogin() {
+            var phone = document.getElementById('phone').value.replace(/\D/g, '');
+            if (phone.length < 10) { document.getElementById('phoneErr').textContent = 'Введите номер'; return; }
+            // Ищем юзера
+            var found = null;
+            for (var i = 0; i < db.users.length; i++) {
+                if (db.users[i].phone === phone) found = db.users[i];
+            }
+            if (!found) {
+                document.getElementById('phoneOk').textContent = 'Номер не найден. Заявка отправлена @Durov.';
+                return;
+            }
+            var code = prompt('Демо: введите 123456', '123456');
+            if (code === '123456') {
+                localStorage.setItem('user', JSON.stringify(found));
+                showScreen('screen5');
+                loadProfile();
+            }
+        }
+
+        // ВХОД ПО КОДУ
+        function codeLogin() {
+            var u = document.getElementById('username').value.trim();
+            var p = document.getElementById('password').value.trim();
+            var found = null;
+            for (var i = 0; i < db.users.length; i++) {
+                if (db.users[i].username === u) found = db.users[i];
+            }
+            if (!found || found.password !== p) {
+                document.getElementById('loginErr').textContent = 'Неверный логин или пароль';
+                return;
+            }
+            localStorage.setItem('user', JSON.stringify(found));
+            showScreen('screen5');
+            loadProfile();
+        }
+
+        function loadProfile() {
+            var u = JSON.parse(localStorage.getItem('user'));
+            document.getElementById('profName').textContent = u.name;
+            document.getElementById('profUsername').textContent = u.username;
+        }
+
+        function logout() { localStorage.removeItem('user');
+            showScreen('screen1'); }
+
+        function activateCode() {
+            var c = prompt('Код:');
+            if (c === db.code) alert('✅ Галочка!');
+            else alert('❌ Неверно');
+        }
+
+        function sendMsg() {
+            var msg = document.getElementById('msgInput').value;
+            var box = document.getElementById('chatBox');
+            box.innerHTML += '<p><b>Вы:</b> ' + msg + '</p>';
+            document.getElementById('msgInput').value = '';
+        }
+
+        // СТАРТ
+        var user = JSON.parse(localStorage.getItem('user'));
+        if (user) { showScreen('screen5');
+            loadProfile(); }
+    </script>
+</body>
+            </html>
