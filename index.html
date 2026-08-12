@@ -3,207 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danilah</title>
+    <title>Danilah Elite v4.0</title>
     <style>
+        :root {
+            --bg: #0a0a12;
+            --card: #1a1a28;
+            --input: #111;
+            --border: #333;
+            --purple: #7c3aed;
+            --gold: #f59e0b;
+            --blue: #3b82f6;
+            --red: #ef4444;
+            --text: #e2e2e8;
+            --sub: #999;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            background: #0a0a12;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            text-align: center;
+            background:var(--bg);
+            color:var(--text);
+            font-family:Arial,sans-serif;
+            padding:15px;
+            min-height:100vh;
+            touch-action:manipulation;
+            -webkit-tap-highlight-color:transparent;
+            -webkit-user-select:none;
+            user-select:none;
         }
-        .screen { display: none; }
-        .screen.active { display: block; }
-        
+        .screen { display:none; }
+        .screen.on { display:block; }
         button {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            margin: 10px 0;
-            font-size: 18px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
+            display:block;
+            width:100%;
+            padding:14px;
+            margin:8px 0;
+            font-size:16px;
+            border:none;
+            border-radius:12px;
+            cursor:pointer;
+            font-weight:bold;
         }
-        .btn-purple { background: #7c3aed; color: white; }
-        .btn-outline { background: transparent; border: 2px solid #8b5cf6; color: #8b5cf6; }
-        .btn-gold { background: #f59e0b; color: black; }
-        .btn-red { background: #ef4444; color: white; }
-        
-        input {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            background: #111;
-            border: 1px solid #333;
-            color: white;
-            font-size: 16px;
-            border-radius: 10px;
+        .bp { background:var(--purple); color:#fff; }
+        .bo { background:transparent; border:2px solid var(--purple); color:var(--purple); }
+        .bg { background:var(--gold); color:#000; }
+        .br { background:var(--red); color:#fff; }
+        .bb { background:#06b6d4; color:#000; }
+        .bs { background:#22c55e; color:#000; }
+        input, select {
+            display:block;
+            width:100%;
+            padding:14px;
+            margin:8px 0;
+            background:var(--input);
+            border:1px solid var(--border);
+            color:#fff;
+            font-size:16px;
+            border-radius:10px;
         }
         .card {
-            background: #1a1a28;
-            padding: 16px;
-            border-radius: 14px;
-            margin: 12px 0;
-            text-align: left;
+            background:var(--card);
+            padding:14px;
+            border-radius:14px;
+            margin:10px 0;
         }
-        .small { font-size: 12px; color: #999; }
-        .err { color: #ef4444; font-size: 14px; }
-        .ok { color: #22c55e; font-size: 14px; }
-        h1 { color: #a78bfa; }
+        .sm { font-size:12px; color:var(--sub); }
+        .er { color:var(--red); font-size:14px; }
+        .ok { color:#22c55e; font-size:14px; }
+        h1 { color:#a78bfa; text-align:center; }
+        .badge {
+            display:inline-block;
+            padding:3px 8px;
+            border-radius:12px;
+            font-size:11px;
+            margin:2px;
+        }
+        .bv { background:rgba(245,158,11,0.2); color:var(--gold); }
+        .bp2 { background:rgba(6,182,212,0.2); color:#06b6d4; }
+        .crown {
+            display:inline-block;
+            background:var(--blue);
+            color:#000;
+            border-radius:50%;
+            width:30px;
+            height:30px;
+            line-height:30px;
+            font-size:16px;
+            text-align:center;
+        }
+        .modal {
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.8);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:999;
+        }
+        .modal-in {
+            background:var(--card);
+            padding:20px;
+            border-radius:16px;
+            max-width:350px;
+            width:90%;
+            max-height:80vh;
+            overflow-y:auto;
+        }
+        .lang-btn {
+            display:inline-block;
+            width:auto;
+            margin:4px;
+            padding:10px 16px;
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН 1: ПРИВЕТСТВИЕ -->
-    <div id="screen1" class="screen active">
-        <h1>DANILAH</h1>
-        <p>Добро пожаловать</p>
-        <button class="btn-purple" onclick="showScreen('screen2')">🚀 Начать</button>
-    </div>
+<!-- ====== ПРИВЕТСТВИЕ ====== -->
+<div id="wel" class="screen on">
+    <h1>DANILAH</h1>
+    <p style="font-size:60px;text-align:center;">🔐</p>
+    <p style="text-align:center;" id="t_welcome">Добро пожаловать в Danilah</p>
+    <button class="bp" onclick="show('choice')" id="t_start">🚀 Начать</button>
+    <button class="bo lang-btn" onclick="showLang()">🌐 Язык</button>
+</div>
 
-    <!-- ЭКРАН 2: ВЫБОР ВХОДА -->
-    <div id="screen2" class="screen">
-        <h1>DANILAH</h1>
-        <p>Выберите способ входа</p>
-        <button class="btn-purple" onclick="showScreen('screen3')">📱 Войти по номеру телефона</button>
-        <p class="small">Быстрый вход через SMS-код</p>
-        <button class="btn-outline" onclick="showScreen('screen4')">🔐 Войти по коду</button>
-        <p class="small">Займет больше времени, чем кодом</p>
-    </div>
+<!-- ====== ВЫБОР ВХОДА ====== -->
+<div id="choice" class="screen">
+    <h1>DANILAH</h1>
+    <p style="text-align:center;" id="t_choice">Выберите способ входа</p>
+    <button class="bp" onclick="show('phone')">📱 <span id="t_phone">По номеру телефона</span></button>
+    <p class="sm" id="t_phone_hint">Быстрый вход через SMS-код</p>
+    <button class="bo" onclick="show('code')">🔐 <span id="t_code">По коду</span></button>
+    <p class="sm" id="t_code_hint">Займет больше времени, чем кодом</p>
+    <button class="bo lang-btn" onclick="showLang()">🌐 Язык</button>
+</div>
 
-    <!-- ЭКРАН 3: ВХОД ПО ТЕЛЕФОНУ -->
-    <div id="screen3" class="screen">
-        <h1>DANILAH</h1>
-        <div class="card">
-            <p>📱 Номер телефона</p>
-            <input type="tel" id="phone" placeholder="+7 999 123-45-67">
-            <button class="btn-purple" onclick="phoneLogin()">Получить код</button>
-            <p class="err" id="phoneErr"></p>
-            <p class="ok" id="phoneOk"></p>
+<!-- ====== ВХОД ПО ТЕЛЕФОНУ ====== -->
+<div id="phone" class="screen">
+    <h1>DANILAH</h1>
+    <div class="card">
+        <p>📱 <span id="t_phone_title">Введите номер телефона</span></p>
+        <input type="tel" id="ph" placeholder="+7 999 123-45-67">
+        <button class="bp" onclick="sendSMS()" id="t_send_sms">Получить код</button>
+        <p class="er" id="pherr"></p>
+        <div id="smsArea" style="display:none;">
+            <input type="text" id="sms" placeholder="Код из SMS">
+            <button class="bp" onclick="confSMS()" id="t_confirm">Подтвердить</button>
         </div>
-        <button class="btn-outline" onclick="showScreen('screen2')">← Назад</button>
+        <p class="ok" id="phok"></p>
     </div>
+    <button class="bo" onclick="show('choice')">← <span id="t_back">Назад</span></button>
+</div>
 
-    <!-- ЭКРАН 4: ВХОД ПО КОДУ -->
-    <div id="screen4" class="screen">
-        <h1>DANILAH</h1>
-        <div class="card">
-            <p>🔐 Авторизация</p>
-            <input type="text" id="username" placeholder="@Username">
-            <input type="password" id="password" placeholder="Код-пароль">
-            <button class="btn-purple" onclick="codeLogin()">Войти</button>
-            <p class="err" id="loginErr"></p>
-        </div>
-        <button class="btn-outline" onclick="showScreen('screen2')">← Назад</button>
+<!-- ====== ВХОД ПО КОДУ ====== -->
+<div id="code" class="screen">
+    <h1>DANILAH</h1>
+    <div class="card">
+        <p>🔐 <span id="t_login_title">Авторизация</span></p>
+        <input type="text" id="un" placeholder="@Username">
+        <input type="password" id="pw" placeholder="Код-пароль">
+        <button class="bp" onclick="loginCode()" id="t_login_btn">Войти</button>
+        <p class="er" id="lerr"></p>
     </div>
+    <button class="bo" onclick="show('choice')">← <span id="t_back2">Назад</span></button>
+</div>
 
-    <!-- ЭКРАН 5: ПРОФИЛЬ -->
-    <div id="screen5" class="screen">
-        <h1>DANILAH</h1>
-        <div class="card">
-            <h2 id="profName">Имя</h2>
-            <p id="profUsername">@user</p>
-        </div>
-        <button class="btn-outline" onclick="showScreen('screen6')">💬 Сообщения</button>
-        <button class="btn-gold" onclick="activateCode()">🎫 Активировать код</button>
-        <button class="btn-red" onclick="logout()">🚪 Выйти</button>
+<!-- ====== КАНАЛЫ ====== -->
+<div id="ch" class="screen">
+    <h1>DANILAH</h1>
+    <p style="text-align:center;" id="t_channels">📢 Каналы</p>
+    <div class="card" onclick="openCh('support')" style="cursor:pointer;">
+        <b>🛟 <span id="t_support">Поддержка Danilah</span></b>
+        <p class="sm">@Durov</p>
     </div>
-
-    <!-- ЭКРАН 6: ЧАТ -->
-    <div id="screen6" class="screen">
-        <h1>DANILAH</h1>
-        <div class="card" id="chatBox" style="height:200px;overflow-y:auto;">
-            <p class="small">Чат</p>
-        </div>
-        <input type="text" id="msgInput" placeholder="Сообщение...">
-        <button class="btn-purple" onclick="sendMsg()">Отправить</button>
-        <button class="btn-outline" onclick="showScreen('screen5')">← Назад</button>
+    <div class="card" onclick="openCh('news')" style="cursor:pointer;">
+        <b>📰 <span id="t_news">Новости Danilah</span></b>
+        <p class="sm" id="t_news_desc">Обновления и анонсы</p>
     </div>
+    <button class="bp" onclick="show('prof')">👤 <span id="t_to_profile">В профиль</span></button>
+</div>
 
-    <script>
-        // БАЗА
-        var db = JSON.parse(localStorage.getItem('db')) || {
+<!-- ====== ПРОФИЛЬ ====== -->
+<div id="prof" class="screen">
+    <h1>DANILAH</h1>
+    <div class="card" style="text-align:center;">
+        <p style="font-size:50px;" id="pemoji">👤</p>
+        <h2 id="pname">Имя</h2>
+        <p id="pun">@user</p>
+        <div id="pbadges"></div>
+        <p class="sm" id="pbio"></p>
+        <div id="pcrown"></div>
+    </div>
+    <button class="bo" onclick="pickEmoji()">🎭 <span id="t_emoji">Эмодзи (Premium)</span></button>
+    <button class="bo" onclick="show('chat')">💬 <span id="t_messages">Сообщения</span></button>
+    <button class="bb" onclick="show('createChat')">➕ <span id="t_create_chat">Создать чат</span></button>
+    <button class="bp" onclick="show('calls')">📞 <span id="t_calls">Звонки</span></button>
+    <button class="bg" onclick="activateCode()">🎫 <span id="t_activate">Активировать код</span></button>
+    <button class="bo" onclick="show('ch')">📢 <span id="t_channels2">Каналы</span></button>
+    <button class="bo lang-btn" onclick="showLang()">🌐 <span id="t_lang">Язык</span></button>
+    <button class="br" onclick="logout()">🚪 <span id="t_logout">Выйти</span></button>
+</div>
+
+<!-- ====== ЧАТ ====== -->
+<div id="chat" class="screen">
+    <h1>DANILAH</h1>
+    <div style="border:1px solid var(--border);border-radius:12px;padding:10px;height:200px;overflow-y:auto;background:#0d0d18;margin:8px 0;" id="chatBox">
+        <p class="sm" id="t_chat_empty">Выберите чат</p>
+    </div>
+    <div style="display:flex;gap:6px;">
+        <input type="text" id="msgIn" placeholder="Сообщение..." style="flex:1;">
+        <button class="bp" onclick="sendMsg()" style="width:auto;">➤</button>
+    </div>
+    <button class="br" onclick="startVoice()" style="width:auto;margin:8px auto;">🎤 <span id="t_voice">Голосовое</span></button>
+    <button class="bo" onclick="show('prof')">← <span id="t_back3">Назад</span></button>
+</div>
+
+<!-- ====== СОЗДАНИЕ ЧАТА ====== -->
+<div id="createChat" class="screen">
+    <h1>DANILAH</h1>
+    <div class="card">
+        <p>➕ <span id="t_create_title">Создать чат</span></p>
+        <input type="text" id="cname" placeholder="Название чата">
+        <input type="text" id="cmembers" placeholder="Участники: @user1,@user2">
+        <button class="bp" onclick="createGroup()" id="t_create_btn">Создать</button>
+        <p class="ok" id="cok"></p>
+    </div>
+    <button class="bo" onclick="show('prof')">← <span id="t_back4">Назад</span></button>
+</div>
+
+<!-- ====== ЗВОНКИ ====== -->
+<div id="calls" class="screen">
+    <h1>DANILAH</h1>
+    <div class="card" style="text-align:center;">
+        <p style="font-size:60px;">📞</p>
+        <p id="t_calls_title">Звонки и видеозвонки</p>
+        <button class="bp" onclick="startCall('audio')">📞 <span id="t_audio">Аудиозвонок</span></button>
+        <button class="bb" onclick="startCall('video')">📹 <span id="t_video">Видеозвонок</span></button>
+        <p class="sm" id="cs"></p>
+    </div>
+    <button class="bo" onclick="show('prof')">← <span id="t_back5">Назад</span></button>
+</div>
+
+<!-- ====== АДМИН-ПАНЕЛЬ (профиль юзера) ====== -->
+<div id="userProfile" class="screen">
+    <h1>DANILAH</h1>
+    <div class="card" style="text-align:center;" id="upInfo"></div>
+    <div id="upActions"></div>
+    <button class="bo" onclick="show('admin')">← <span id="t_back6">Назад</span></button>
+</div>
+
+<!-- ====== АДМИН ====== -->
+<div id="admin" class="screen">
+    <h1>👑 DANILAH</h1>
+    <button class="bp" onclick="admTab('apps')">📋 <span id="t_apps">Заявки</span></button>
+    <button class="bo" onclick="admTab('users')">👥 <span id="t_users">Пользователи</span></button>
+    <button class="bg" onclick="admTab('codes')">🔑 <span id="t_codes">Коды</span></button>
+    <div id="admC"></div>
+    <button class="bo" onclick="show('prof')">← <span id="t_back7">Назад</span></button>
+</div>
+
+<!-- ====== МОДАЛКА БАНА ====== -->
+<div class="modal" id="banModal" style="display:none;">
+    <div class="modal-in">
+        <h3>🚫 <span id="t_ban_title">Блокировка</span></h3>
+        <p id="t_ban_desc">Выберите срок блокировки:</p>
+        <select id="banDuration">
+            <option value="3600000">1 час</option>
+            <option value="86400000">1 день</option>
+            <option value="604800000">1 неделя</option>
+            <option value="2592000000">30 дней</option>
+            <option value="0">Навсегда</option>
+        </select>
+        <button class="br" onclick="confirmBan()" id="t_ban_btn">Заблокировать</button>
+        <button class="bo" onclick="closeBan()" id="t_cancel">Отмена</button>
+    </div>
+</div>
+
+<!-- ====== МОДАЛКА ЯЗЫКОВ ====== -->
+<div class="modal" id="langModal" style="display:none;">
+    <div class="modal-in">
+        <h3>🌐 Выбор языка</h3>
+        <button class="bp lang-btn" onclick="setLang('ru')">🇷🇺 Русский</button>
+        <button class="bp lang-btn" onclick="setLang('uk')">🇺🇦 Українська</button>
+        <button class="bp lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+        <button class="bp lang-btn" onclick="setLang('ar')">🇸🇦 العربية</button>
+        <button class="bp lang-btn" onclick="setLang('zh')">🇨🇳 中文</button>
+        <button class="bp lang-btn" onclick="setLang('ja')">🇯🇵 日本語</button>
+        <button class="bp lang-btn" onclick="setLang('ko')">🇰🇵 조선어</button>
+        <button class="bp lang-btn" onclick="customLang()">✏️ Кастомный язык</button>
+        <button class="bo" onclick="closeLang()">Закрыть</button>
+    </div>
+</div>
+
+<script>
+// ====== БАЗА ======
+function DB() {
+    var d = localStorage.getItem('ddb');
+    if (!d) {
+        var def = {
             users: [{ id: 'o1', name: 'Владелец', username: '@Durov', password: 'admin123', role: 'owner', status: 'premium',
-                verified: true }
-            ],
+                verified: true, emoji: '👑', bio: 'Создатель', phone: '', banned: false, banAdmin: '', banUntil: null,
+                banReason: '' }],
+            apps: [],
             msgs: [],
-            code: 'QQO1098'
+            chats: [{ id: 'c1', name: 'Общий', members: ['@Durov'] }],
+            code: 'QQO1098',
+            smsCodes: {}
         };
+        localStorage.setItem('ddb', JSON.stringify(def));
+        return def;
+    }
+    return JSON.parse(d);
+}
 
-        function save() { localStorage.setItem('db', JSON.stringify(db)); }
+function save(d) { localStorage.setItem('ddb', JSON.stringify(d)); }
 
-        function showScreen(id) {
-            var screens = document.querySelectorAll('.screen');
-            for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
-            document.getElementById(id).classList.add('active');
-        }
+function show(id) {
+    var ss = document.querySelectorAll('.screen');
+    for (var i = 0; i < ss.length; i++) ss[i].classList.remove('on');
+    var el = document.getElementById(id);
+    if (el) el.classList.add('on');
+    if (id === 'prof') loadProf();
+    if (id === 'admin') admTab('apps');
+}
 
-        // ВХОД ПО ТЕЛЕФОНУ
-        function phoneLogin() {
-            var phone = document.getElementById('phone').value.replace(/\D/g, '');
-            if (phone.length < 10) { document.getElementById('phoneErr').textContent = 'Введите номер'; return; }
-            // Ищем юзера
-            var found = null;
-            for (var i = 0; i < db.users.length; i++) {
-                if (db.users[i].phone === phone) found = db.users[i];
-            }
-            if (!found) {
-                document.getElementById('phoneOk').textContent = 'Номер не найден. Заявка отправлена @Durov.';
-                return;
-            }
-            var code = prompt('Демо: введите 123456', '123456');
-            if (code === '123456') {
-                localStorage.setItem('user', JSON.stringify(found));
-                showScreen('screen5');
-                loadProfile();
-            }
-        }
+function me() { return JSON.parse(localStorage.getItem('duser') || 'null'); }
 
-        // ВХОД ПО КОДУ
-        function codeLogin() {
-            var u = document.getElementById('username').value.trim();
-            var p = document.getElementById('password').value.trim();
-            var found = null;
-            for (var i = 0; i < db.users.length; i++) {
-                if (db.users[i].username === u) found = db.users[i];
-            }
-            if (!found || found.password !== p) {
-                document.getElementById('loginErr').textContent = 'Неверный логин или пароль';
-                return;
-            }
-            localStorage.setItem('user', JSON.stringify(found));
-            showScreen('screen5');
-            loadProfile();
-        }
+function saveMe(u) { localStorage.setItem('duser', JSON.stringify(u)); }
 
-        function loadProfile() {
-            var u = JSON.parse(localStorage.getItem('user'));
-            document.getElementById('profName').textContent = u.name;
-            document.getElementById('profUsername').textContent = u.username;
-        }
-
-        function logout() { localStorage.removeItem('user');
-            showScreen('screen1'); }
-
-        function activateCode() {
-            var c = prompt('Код:');
-            if (c === db.code) alert('✅ Галочка!');
-            else alert('❌ Неверно');
-        }
-
-        function sendMsg() {
-            var msg = document.getElementById('msgInput').value;
-            var box = document.getElementById('chatBox');
-            box.innerHTML += '<p><b>Вы:</b> ' + msg + '</p>';
-            document.getElementById('msgInput').value = '';
-        }
-
-        // СТАРТ
-        var user = JSON.parse(localStorage.getItem('user'));
-        if (user) { showScreen('screen5');
-            loadProfile(); }
-    </script>
-</body>
-            </html>
+// ====== ЯЗЫКИ ======
+var langs = {
+    ru: { welcome: 'Добро пожаловать в Danilah', start: '🚀 Начать', choice: 'Выберите способ входа', phone: 'По номеру телефона',
+        phone_hint: 'Быстрый вход через SMS-код', code: 'По коду', code_hint: 'Займет больше времени, чем кодом',
+        phone_title: 'Введите номер телефона', send_sms: 'Получить код', confirm: 'Подтвердить', back: 'Назад',
+        login_title: 'Авторизация', login_btn: 'Войти', channels: '📢 Каналы', support: 'Поддержка Danilah',
+        news: 'Новости Danilah', news_desc: 'Обновления и анонсы', to_profile: 'В профиль', emoji: 'Эмодзи (Premium)',
+        messages: 'Сообщения', create_chat: 'Создать чат', calls: 'Звонки', activate: 'Активировать код',
+        channels2: 'Каналы', lang: 'Язык', logout: 'Выйти', chat_empty: 'Выберите чат', voice: 'Голосовое',
+        create_title: 'Создать чат', create_btn: 'Создать', calls_title: 'Звонки и видеозвонки', audio: 'Аудиозвонок',
+        video: 'Видеозвонок', apps: 'Заявки', users: 'Пользователи', codes: 'Коды', ban_title: 'Блокировка',
+        ban_desc: 'Выберите срок:', ban_btn: 'Заблокировать', cancel: 'Отмена', ban_msg: 'Аккаунт заблокирован админом',
+        ban_on: 'на', ban_forever: 'Навсегда' },
+    uk: { welcome: 'Ласкаво просимо до Danilah', start: '🚀 Почати', choice: 'Виберіть спосіб входу', phone: 'За номером телефону',
+        phone_hint: 'Швидкий вхід через SMS-код', code: 'За кодом', code_hint: 'Займе більше часу, ніж кодом',
+        phone_title: 'Введіть номер телефону', send_sms: 'Отримати код', confirm: 'Підтвердити', back: 'Назад',
+        login_title: 'Авторизація', login_btn: 'Увійти', channels: '📢 Канали', support: 'Підтримка Danilah',
+        news: 'Новини Danilah', news_desc: 'Оновлення та анонси', to_profile: 'У профіль', emoji: 'Емодзі (Premium)',
+        messages: 'Повідомлення', create_chat: 'Створити чат', calls: 'Дзвінки', activate: 'Активувати код',
+        channels2: 'Канали', lang: 'Мова', logout: 'Вийти', chat_empty: 'Виберіть чат', voice: 'Голосове',
+        create_title: 'Створити чат', create_btn: 'Створити', calls_title: 'Дзвінки та відеодзвінки', audio: 'Аудіодзвінок',
+        video: 'Відеодзвінок', apps: 'Заявки', users: 'Користувачі', codes: 'Коди', ban_title: 'Блокування',
+        ban_desc: 'Виберіть термін:', ban_btn: 'Заблокувати', cancel: 'Скасувати', ban_msg: 'Акаунт заблоковано адміном',
+        ban_on: 'на', ban_forever: 'Назавжди' },
+    en: { welcome: 'Welcome to Danilah', start: '🚀 Start', choice: 'Choose login method', phone: 'By phone number',
+        phone_hint: 'Quick login via SMS code', code: 'By code', code_hint: 'Takes longer than code',
+        phone_title: 'Enter phone number', send_sms: 'Get code', confirm: 'Confirm', back: 'Back',
+        login_title: 'Authorization', login_btn: 'Login', channels: '📢 Channels', support: 'Danilah Support',
+        news: 'Danilah News', news_desc: 'Updates and announcements', to_profile: 'To Profile', emoji: 'Emoji (Premium)',
+        messages: 'Messages', create_chat: 'Create Chat', calls: 'Calls', activate: 'Activate Code',
+        channels2: 'Channels', lang: 'Language', logout: 'Logout', chat_empty: 'Select chat', voice: 'Voice',
+        create_title: 'Create Chat', create_btn: 'Create', calls_title: 'Calls & Video Calls', audio: 'Audio Call',
+        video: 'Video Call', apps: 'Applications', users: 'Users', codes: 'Codes', ban_title: 'Block',
+        ban_desc: 'Select duration:', ban_btn: 'Block', cancel: 'Cancel', ban_msg: 'Account blocked by admin',
+        ban_on: 'for', ban_forever: 'Forever' },
+    ar: { welcome: 'مرحباً بك في Danilah', start: '🚀 ابدأ', choice: 'اختر طريقة الدخول', phone: 'برقم الهاتف',
+        phone_hint: 'دخول سريع عبر رمز SMS', code: 'بالرمز', code_hint: 'يستغرق وقتاً أطول من الرمز',
+        phone_title: 'أدخل رقم الهاتف', send_sms: 'احصل على الرمز', confirm: 'تأكيد', back: 'رجوع',
+        login_title: 'تسجيل الدخول', login_btn: 'دخول', channels: '📢 القنوات', support: 'دعم Danilah',
+        news: 'أخبار Danilah', news_desc: 'التحديثات والإعلانات', to_profile: 'إلى الملف', emoji: 'إيموجي (Premium)',
+        messages: 'رسائل', create_chat: 'إنشاء محادثة', calls: 'مكالمات', activate: 'تفعيل الرمز', channels2: 'قنوات',
+        lang: 'لغة', logout: 'خروج', chat_empty: 'اختر محادثة', voice: 'صوت', create_title: 'إنشاء محادثة',
+        create_btn: 'إنشاء', calls_title: 'مكالمات وفيديو', audio: 'مكالمة صوتية', video: 'مكالمة فيديو', apps: 'طلبات',
+        users: 'مستخدمين', codes: 'رموز', ban_title: 'حظر', ban_desc: 'اختر المدة:', ban_btn: 'حظر', cancel: 'إلغاء',
+        ban_msg: 'تم حظر الحساب من قبل', ban_on: 'لمدة', ban_forever: 'للأبد' },
+    zh: { welcome: '欢迎来到 Danilah', start: '🚀 开始', choice: '选择登录方式', phone: '手机号', phone_hint: '通过短信快速登录',
+        code: '验证码', code_hint: '比验证码慢', phone_title: '输入手机号', send_sms: '获取验证码', confirm: '确认',
+        back: '返回', login_title: '登录', login_btn: '登录', channels: '📢 频道', support: 'Danilah 支持', news: 'Danilah 新闻',
+        news_desc: '更新和公告', to_profile: '个人资料', emoji: '表情 (Premium)', messages: '消息', create_chat: '创建聊天',
+        calls: '通话', activate: '激活码', channels2: '频道', lang: '语言', logout: '退出', chat_empty: '选择聊天',
+        voice: '语音', create_title: '创建聊天', create_btn: '创建', calls_title: '通话和视频', audio: '语音通话',
+        video: '视频通话', apps: '申请', users: '用户', codes: '代码', ban_title: '封禁', ban_desc: '选择时长:',
+        ban_btn: '封禁', cancel: '取消', ban_msg: '账户已被管理员封禁', ban_on: '', ban_forever: '永久' },
+    ja: { welcome: 'Danilahへようこそ', start: '🚀 開始', choice: 'ログイン方法', phone: '電話番号', phone_hint: 'SMSで簡単ログイン',
+        code: 'コード', code_hint: 'コードより時間がかかります', phone_title: '電話番号を入力', send_sms: 'コード取得', confirm: '確認',
+        back: '戻る', login_title: 'ログイン', login_btn: 'ログイン', channels: '📢 チャンネル', support: 'Danilahサポート',
+        news: 'Danilahニュース', news_desc: '更新とお知らせ', to_profile: 'プロフィール', emoji: '絵文字 (Premium)',
+        messages: 'メッセージ', create_chat: 'チャット作成', calls: '通話', activate: 'コード激活', channels2: 'チャンネル',
+        lang: '言語', logout: 'ログアウト', chat_empty: 'チャット選択', voice: '音声', create_title: 'チャット作成',
+        create_btn: '作成', calls_title: '通話とビデオ', audio: '音声通話', video: 'ビデオ通話', apps: '申請', users: 'ユーザー',
+        codes: 'コード', ban_title: '禁止', ban_desc: '期間選択:', ban_btn: '禁止', cancel: '取消', ban_msg: '管理者により禁止',
+        ban_on: '', ban_forever: '永久' },
+    ko: { welcome: 'Danilah에 오신 것을 환영합니다', start: '🚀 시작', choice: '로그인 방법', phone: '전화번호', phone_hint: 'SMS로 빠른 로그인',
+        code: '코드', code_hint: '코드보다 시간이 더 걸립니다', phone_title: '전화번호 입력', send_sms: '코드 받기', confirm: '확인',
+        back: '뒤로', login_title: '로그인', login_btn: '로그인', channels: '📢 채널', support: 'Danilah 지원', news: 'Danilah 뉴스',
+        news_desc: '업데이트 및 공지', to_profile: '프로필', emoji: '이모지 (Premium)', messages: '메시지',
+        create_chat: '채팅 만들기', calls: '통화', activate: '코드 활성화', channels2: '채널', lang: '언어', logout: '로그아웃',
+        chat_empty: '채팅 선택', voic
