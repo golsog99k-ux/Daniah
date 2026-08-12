@@ -3,33 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danilah Elite v5.0</title>
+    <title>Danilah Elite v6.0</title>
     <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             background:#0a0a12;
             color:#fff;
             font-family:Arial,sans-serif;
-            padding:15px;
             margin:0;
-            text-align:center;
             touch-action:manipulation;
             -webkit-tap-highlight-color:transparent;
+            -webkit-user-select:none;
+            user-select:none;
+            overflow-x:hidden;
         }
-        h1 { color:#a78bfa; font-size:26px; margin:10px 0; }
+        
+        .app {
+            max-width:480px;
+            margin:0 auto;
+            min-height:100vh;
+            position:relative;
+        }
+        
+        /* ШАПКА */
+        .header {
+            background:#1a0f2e;
+            padding:14px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            border-bottom:1px solid #333;
+            position:sticky;
+            top:0;
+            z-index:10;
+        }
+        .header h1 {
+            font-size:20px;
+            color:#a78bfa;
+            margin:0;
+        }
+        .menu-btn {
+            background:none;
+            border:none;
+            color:#fff;
+            font-size:24px;
+            cursor:pointer;
+            padding:4px 8px;
+        }
+        
+        /* СТРАНИЦЫ */
         .page { display:none; }
         .page.on { display:block; }
-        .box {
-            background:#1a1a28;
-            border-radius:14px;
-            padding:16px;
-            margin:10px 0;
+        
+        /* БОКОВОЕ МЕНЮ */
+        .sidebar {
+            position:fixed;
+            top:0;
+            left:-280px;
+            width:260px;
+            height:100%;
+            background:#141420;
+            z-index:100;
+            transition:left 0.3s;
+            padding-top:20px;
+            overflow-y:auto;
         }
+        .sidebar.open { left:0; }
+        .sidebar-overlay {
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.5);
+            z-index:99;
+            display:none;
+        }
+        .sidebar-overlay.show { display:block; }
+        
+        .sidebar .menu-item {
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:14px 20px;
+            cursor:pointer;
+            font-size:16px;
+            border:none;
+            background:none;
+            color:#fff;
+            width:100%;
+            text-align:left;
+        }
+        .sidebar .menu-item:active { background:#2a2a38; }
+        
+        .sidebar .profile-box {
+            padding:20px;
+            background:#1a1a28;
+            margin-bottom:10px;
+        }
+        
+        /* КНОПКИ */
         button {
             display:block;
             width:100%;
             padding:14px;
-            margin:8px 0;
-            font-size:16px;
+            margin:6px 0;
+            font-size:15px;
             font-weight:bold;
             border:none;
             border-radius:10px;
@@ -40,6 +116,7 @@
         .bg { background:#f59e0b; color:#000; }
         .br { background:#ef4444; color:#fff; }
         .bb { background:#06b6d4; color:#000; }
+        
         input {
             display:block;
             width:100%;
@@ -48,13 +125,45 @@
             background:#111;
             border:1px solid #333;
             color:#fff;
-            font-size:16px;
+            font-size:15px;
             border-radius:8px;
-            box-sizing:border-box;
         }
+        
+        .box {
+            background:#1a1a28;
+            border-radius:12px;
+            padding:14px;
+            margin:8px 0;
+        }
+        
         .sm { font-size:12px; color:#999; }
         .er { color:#ef4444; }
         .ok { color:#22c55e; }
+        
+        .list-item {
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:14px;
+            background:#1a1a28;
+            border-radius:12px;
+            margin:6px 0;
+            cursor:pointer;
+        }
+        .list-item:active { background:#2a2a38; }
+        
+        .avatar {
+            width:46px;
+            height:46px;
+            border-radius:50%;
+            background:#7c3aed;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:20px;
+            flex-shrink:0;
+        }
+        
         .badge {
             display:inline-block;
             padding:3px 8px;
@@ -64,119 +173,111 @@
         }
         .bv { background:rgba(245,158,11,0.2); color:#f59e0b; }
         .bprem { background:rgba(6,182,212,0.2); color:#06b6d4; }
+        
+        .content { padding:14px; }
     </style>
 </head>
 <body>
 
-<!-- ПРИВЕТСТВИЕ -->
-<div class="page on" id="welcome">
-    <h1>DANILAH</h1>
-    <p style="font-size:60px;">🔐</p>
-    <p>Добро пожаловать</p>
-    <button class="bp" onclick="show('choice')">🚀 Начать</button>
-</div>
+<div class="app">
 
-<!-- ВЫБОР ВХОДА -->
-<div class="page" id="choice">
-    <h1>DANILAH</h1>
-    <p>Выберите способ входа</p>
-    <button class="bp" onclick="show('phonePage')">📱 По номеру телефона</button>
-    <p class="sm">Быстрый вход</p>
-    <button class="bo" onclick="show('codePage')">🔐 По коду</button>
-    <p class="sm">Займет больше времени</p>
-</div>
-
-<!-- ВХОД ПО ТЕЛЕФОНУ -->
-<div class="page" id="phonePage">
-    <h1>DANILAH</h1>
-    <div class="box">
-        <input type="tel" id="phone" placeholder="+7 999 123-45-67">
-        <button class="bp" onclick="getSMS()">Получить код</button>
-        <div id="smsArea" style="display:none;">
-            <input type="text" id="smsCode" placeholder="Код из SMS">
-            <button class="bp" onclick="checkSMS()">Подтвердить</button>
+    <!-- БОКОВОЕ МЕНЮ -->
+    <div class="sidebar-overlay" id="overlay" onclick="closeMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="profile-box">
+            <div style="font-size:40px;" id="mEmoji">👤</div>
+            <b id="mName">Имя</b>
+            <p class="sm" id="mUser">@user</p>
+            <div id="mBadges"></div>
         </div>
-        <p class="ok" id="phoneMsg"></p>
+        <button class="menu-item" onclick="openMenuPage('chats')">💬 Чаты</button>
+        <button class="menu-item" onclick="openMenuPage('contacts')">👥 Контакты</button>
+        <button class="menu-item" onclick="openMenuPage('channels')">📢 Каналы</button>
+        <button class="menu-item" onclick="openMenuPage('calls')">📞 Звонки</button>
+        <button class="menu-item" onclick="openMenuPage('settings')">⚙️ Настройки</button>
+        <button class="menu-item" onclick="openMenuPage('support')">🛟 Поддержка</button>
+        <button class="menu-item" onclick="logout()" style="color:#ef4444;">🚪 Выйти</button>
     </div>
-    <button class="bo" onclick="show('choice')">← Назад</button>
-</div>
 
-<!-- ВХОД ПО КОДУ -->
-<div class="page" id="codePage">
-    <h1>DANILAH</h1>
-    <div class="box">
-        <input type="text" id="loginUser" placeholder="@Username">
-        <input type="password" id="loginPass" placeholder="Код-пароль">
-        <button class="bp" onclick="login()">Войти</button>
-        <p class="er" id="loginErr"></p>
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <div id="mainPage">
+        <div class="header">
+            <button class="menu-btn" onclick="openMenu()">☰</button>
+            <h1>DANILAH</h1>
+            <span style="font-size:20px;">🔐</span>
+        </div>
+        <div class="content" id="mainContent">
+            <!-- Здесь будут чаты -->
+        </div>
     </div>
-    <button class="bo" onclick="show('choice')">← Назад</button>
-</div>
 
-<!-- КАНАЛЫ -->
-<div class="page" id="channels">
-    <h1>DANILAH</h1>
-    <p>📢 Каналы</p>
-    <div class="box" onclick="openChannel('support')" style="cursor:pointer;">
-        <b>🛟 Поддержка Danilah</b>
+    <!-- ПРИВЕТСТВИЕ -->
+    <div class="page on" id="welcomePage">
+        <div class="content" style="text-align:center;padding-top:80px;">
+            <p style="font-size:70px;">🔐</p>
+            <h1 style="color:#a78bfa;margin:20px 0;">DANILAH</h1>
+            <p>Добро пожаловать в Danilah</p>
+            <p class="sm">Закрытая экосистема</p>
+            <br>
+            <button class="bp" onclick="showLoginChoice()">🚀 Начать</button>
+        </div>
     </div>
-    <div class="box" onclick="openChannel('news')" style="cursor:pointer;">
-        <b>📰 Новости Danilah</b>
-    </div>
-    <button class="bp" onclick="show('profile')">👤 В профиль</button>
-</div>
 
-<!-- ПРОФИЛЬ -->
-<div class="page" id="profile">
-    <h1>DANILAH</h1>
-    <div class="box">
-        <p style="font-size:50px;margin:0;" id="pEmoji">👤</p>
-        <h2 id="pName">Имя</h2>
-        <p id="pUser">@user</p>
-        <div id="pBadges"></div>
+    <!-- ВЫБОР ВХОДА -->
+    <div class="page" id="loginChoicePage">
+        <div class="content" style="padding-top:60px;">
+            <h1 style="color:#a78bfa;text-align:center;">DANILAH</h1>
+            <p style="text-align:center;">Выберите способ входа</p>
+            <br>
+            <button class="bp" onclick="showPhone()">📱 По номеру телефона</button>
+            <p class="sm" style="text-align:center;">Быстрый вход</p>
+            <button class="bo" onclick="showCode()">🔐 По коду</button>
+            <p class="sm" style="text-align:center;">Займет больше времени</p>
+            <br>
+            <button class="bo" onclick="showApply()">🆘 Нет кода — заявка</button>
+        </div>
     </div>
-    <button class="bo" onclick="show('chat')">💬 Сообщения</button>
-    <button class="bb" onclick="show('createChat')">➕ Создать чат</button>
-    <button class="bp" onclick="show('calls')">📞 Звонки</button>
-    <button class="bg" onclick="verify()">🎫 Активировать код</button>
-    <button class="bo" onclick="show('channels')">📢 Каналы</button>
-    <button class="br" onclick="logout()">🚪 Выйти</button>
-</div>
 
-<!-- ЧАТ -->
-<div class="page" id="chat">
-    <h1>DANILAH</h1>
-    <div class="box" id="chatBox" style="height:180px;overflow-y:auto;text-align:left;">
-        <p class="sm">Чат</p>
+    <!-- ВХОД ПО ТЕЛЕФОНУ -->
+    <div class="page" id="phonePage">
+        <div class="content">
+            <h2 style="color:#a78bfa;">📱 Телефон</h2>
+            <input type="tel" id="phone" placeholder="+7 999 123-45-67">
+            <button class="bp" onclick="getSMS()">Получить код</button>
+            <div id="smsArea" style="display:none;">
+                <input type="text" id="smsCode" placeholder="Код из SMS">
+                <button class="bp" onclick="checkSMS()">Подтвердить</button>
+            </div>
+            <p class="ok" id="phoneMsg"></p>
+            <button class="bo" onclick="backToChoice()">← Назад</button>
+        </div>
     </div>
-    <div style="display:flex;gap:5px;">
-        <input type="text" id="msgInput" placeholder="Сообщение..." style="flex:1;">
-        <button class="bp" onclick="sendMsg()" style="width:auto;">➤</button>
-    </div>
-    <button class="bo" onclick="show('profile')">← Назад</button>
-</div>
 
-<!-- СОЗДАТЬ ЧАТ -->
-<div class="page" id="createChat">
-    <h1>DANILAH</h1>
-    <div class="box">
-        <input type="text" id="chatName" placeholder="Название чата">
-        <button class="bp" onclick="createGroup()">Создать</button>
-        <p class="ok" id="chatMsg"></p>
+    <!-- ВХОД ПО КОДУ -->
+    <div class="page" id="codePage">
+        <div class="content">
+            <h2 style="color:#a78bfa;">🔐 Вход по коду</h2>
+            <input type="text" id="loginUser" placeholder="@Username">
+            <input type="password" id="loginPass" placeholder="Код-пароль">
+            <button class="bp" onclick="login()">Войти</button>
+            <p class="er" id="loginErr"></p>
+            <button class="bo" onclick="backToChoice()">← Назад</button>
+        </div>
     </div>
-    <button class="bo" onclick="show('profile')">← Назад</button>
-</div>
 
-<!-- ЗВОНКИ -->
-<div class="page" id="calls">
-    <h1>DANILAH</h1>
-    <div class="box">
-        <p style="font-size:50px;">📞</p>
-        <button class="bp" onclick="call('audio')">📞 Аудиозвонок</button>
-        <button class="bb" onclick="call('video')">📹 Видеозвонок</button>
-        <p class="sm" id="callStatus"></p>
+    <!-- ЗАЯВКА -->
+    <div class="page" id="applyPage">
+        <div class="content">
+            <h2 style="color:#a78bfa;">🆘 Заявка</h2>
+            <p class="sm">@Durov выдаст вам код</p>
+            <input type="text" id="applyName" placeholder="Ваше имя">
+            <input type="text" id="applyUsername" placeholder="@Username">
+            <button class="bp" onclick="apply()">Отправить</button>
+            <p class="ok" id="applyMsg"></p>
+            <button class="bo" onclick="backToChoice()">← Назад</button>
+        </div>
     </div>
-    <button class="bo" onclick="show('profile')">← Назад</button>
+
 </div>
 
 <script>
@@ -184,19 +285,164 @@
 var db = JSON.parse(localStorage.getItem('ddb')) || {
     users: [{ id: 'o1', name: 'Владелец', username: '@Durov', password: 'admin123', role: 'owner', status: 'premium', verified: true, emoji: '👑' }],
     code: 'QQO1098',
-    sms: {}
+    sms: {},
+    msgs: [{ from: '@Durov', to: 'all', text: 'Добро пожаловать в Danilah!', time: new Date().toISOString() }]
 };
 
 function save() { localStorage.setItem('ddb', JSON.stringify(db)); }
-
 var me = JSON.parse(localStorage.getItem('dme')) || null;
 
-function show(id) {
+function showPage(id) {
     var pages = document.querySelectorAll('.page');
     for (var i = 0; i < pages.length; i++) pages[i].classList.remove('on');
     var el = document.getElementById(id);
     if (el) el.classList.add('on');
-    if (id === 'profile') loadProfile();
+}
+
+function hideAll() {
+    var pages = document.querySelectorAll('.page');
+    for (var i = 0; i < pages.length; i++) pages[i].classList.remove('on');
+    document.getElementById('mainPage').style.display = 'none';
+}
+
+function showMain() {
+    hideAll();
+    document.getElementById('mainPage').style.display = 'block';
+    loadChats();
+}
+
+function showLoginChoice() {
+    hideAll();
+    showPage('loginChoicePage');
+}
+
+function showPhone() {
+    hideAll();
+    showPage('phonePage');
+}
+
+function showCode() {
+    hideAll();
+    showPage('codePage');
+}
+
+function showApply() {
+    hideAll();
+    showPage('applyPage');
+}
+
+function backToChoice() {
+    hideAll();
+    showPage('loginChoicePage');
+}
+
+// МЕНЮ
+function openMenu() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('show');
+    if (me) {
+        document.getElementById('mEmoji').textContent = me.emoji || '👤';
+        document.getElementById('mName').textContent = me.name;
+        document.getElementById('mUser').textContent = me.username;
+        var b = '';
+        if (me.verified) b += '<span class="badge bv">⭐</span> ';
+        if (me.status === 'premium') b += '<span class="badge bprem">💎</span> ';
+        document.getElementById('mBadges').innerHTML = b;
+    }
+}
+
+function closeMenu() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+}
+
+function openMenuPage(page) {
+    closeMenu();
+    if (page === 'chats') loadChats();
+    if (page === 'contacts') loadContacts();
+    if (page === 'channels') loadChannels();
+    if (page === 'calls') loadCalls();
+    if (page === 'settings') loadSettings();
+    if (page === 'support') loadSupport();
+}
+
+// ЗАГРУЗКА СТРАНИЦ
+function loadChats() {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">💬 Чаты</h2>' +
+        '<div class="list-item" onclick="openChat(\'Общий чат\')"><div class="avatar">💬</div><div><b>Общий чат</b><p class="sm">' + (db.msgs.length || 0) + ' сообщений</p></div></div>' +
+        '<div class="list-item" onclick="openChat(\'Поддержка\')"><div class="avatar">🛟</div><div><b>Поддержка Danilah</b><p class="sm">@Durov</p></div></div>';
+}
+
+function loadContacts() {
+    var c = document.getElementById('mainContent');
+    var h = '<h2 style="color:#a78bfa;">👥 Контакты</h2>';
+    for (var i = 0; i < db.users.length; i++) {
+        var u = db.users[i];
+        h += '<div class="list-item"><div class="avatar">' + (u.emoji || '👤') + '</div><div><b>' + u.name + '</b> ' + (u.verified ? '⭐' : '') + (u.status === 'premium' ? '💎' : '') + '<p class="sm">' + u.username + '</p></div></div>';
+    }
+    c.innerHTML = h;
+}
+
+function loadChannels() {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">📢 Каналы</h2>' +
+        '<div class="list-item" onclick="openChannel(\'support\')"><div class="avatar">🛟</div><div><b>Поддержка Danilah</b><p class="sm">Официальный канал</p></div></div>' +
+        '<div class="list-item" onclick="openChannel(\'news\')"><div class="avatar">📰</div><div><b>Новости Danilah</b><p class="sm">Обновления и анонсы</p></div></div>';
+}
+
+function loadCalls() {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">📞 Звонки</h2><div class="box" style="text-align:center;">' +
+        '<p style="font-size:50px;">📞</p>' +
+        '<button class="bp" onclick="call(\'audio\')">📞 Аудиозвонок</button>' +
+        '<button class="bb" onclick="call(\'video\')">📹 Видеозвонок</button>' +
+        '<p class="sm" id="callStatus"></p></div>';
+}
+
+function loadSettings() {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">⚙️ Настройки</h2>' +
+        '<div class="box"><b>Аккаунт</b><p class="sm">' + (me ? me.name + ' (' + me.username + ')' : '') + '</p></div>' +
+        '<button class="bp" onclick="verify()">🎫 Активировать код</button>' +
+        '<button class="bo" onclick="alert(\'💎 Premium — свяжитесь с @Durov\')">💎 Хочу Premium</button>' +
+        '<button class="br" onclick="logout()">🚪 Выйти</button>';
+}
+
+function loadSupport() {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2>' +
+        '<div class="box"><b>Свяжитесь с @Durov</b>' +
+        '<button class="bp" onclick="openChat(\'Поддержка\')">💬 Написать</button></div>';
+}
+
+// ЧАТ
+function openChat(name) {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">💬 ' + name + '</h2>' +
+        '<div class="box" id="chatBox" style="height:250px;overflow-y:auto;text-align:left;">' +
+        '<p class="sm">Начните переписку...</p></div>' +
+        '<div style="display:flex;gap:5px;"><input type="text" id="msgInput" placeholder="Сообщение..." style="flex:1;">' +
+        '<button class="bp" onclick="sendMsg()" style="width:auto;">➤</button></div>' +
+        '<button class="bo" onclick="loadChats()">← Назад</button>';
+}
+
+function sendMsg() {
+    var m = document.getElementById('msgInput').value.trim();
+    if (!m || !me) return;
+    var box = document.getElementById('chatBox');
+    box.innerHTML += '<p><b>' + me.name + ':</b> ' + m + '</p>';
+    document.getElementById('msgInput').value = '';
+    box.scrollTop = box.scrollHeight;
+}
+
+function openChannel(type) {
+    var c = document.getElementById('mainContent');
+    if (type === 'support') {
+        c.innerHTML = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2><div class="box"><p>Здравствуйте! @Durov поможет.</p></div><button class="bo" onclick="loadChannels()">← Назад</button>';
+    } else {
+        c.innerHTML = '<h2 style="color:#a78bfa;">📰 Новости</h2><div class="box"><p>Добро пожаловать в Danilah Elite!</p></div><button class="bo" onclick="loadChannels()">← Назад</button>';
+    }
 }
 
 // SMS
@@ -214,7 +460,6 @@ function checkSMS() {
     var ph = document.getElementById('phone').value.replace(/\D/g, '');
     var code = document.getElementById('smsCode').value.trim();
     if (db.sms[ph] === code) {
-        // Найти или создать
         var found = null;
         for (var i = 0; i < db.users.length; i++) {
             if (db.users[i].phone === ph) found = db.users[i];
@@ -226,13 +471,13 @@ function checkSMS() {
         }
         me = found;
         localStorage.setItem('dme', JSON.stringify(me));
-        show('channels');
+        showMain();
     } else {
         alert('Неверный код');
     }
 }
 
-// ВХОД ПО КОДУ
+// ВХОД
 function login() {
     var u = document.getElementById('loginUser').value.trim();
     var p = document.getElementById('loginPass').value.trim();
@@ -243,21 +488,23 @@ function login() {
     if (!found) { document.getElementById('loginErr').textContent = 'Неверный логин или пароль'; return; }
     me = found;
     localStorage.setItem('dme', JSON.stringify(me));
-    show('channels');
+    showMain();
 }
 
-// ПРОФИЛЬ
-function loadProfile() {
-    if (!me) { show('welcome'); return; }
-    document.getElementById('pName').textContent = me.name;
-    document.getElementById('pUser').textContent = me.username;
-    document.getElementById('pEmoji').textContent = me.emoji || '👤';
-    var b = '';
-    if (me.verified) b += '<span class="badge bv">⭐</span> ';
-    if (me.status === 'premium') b += '<span class="badge bprem">💎 Premium</span> ';
-    document.getElementById('pBadges').innerHTML = b || 'Пользователь';
+// ЗАЯВКА
+function apply() {
+    var n = document.getElementById('applyName').value.trim();
+    var u = document.getElementById('applyUsername').value.trim();
+    if (!n || !u) { alert('Заполните поля'); return; }
+    if (!db.apps) db.apps = [];
+    db.apps.push({ name: n, username: u, status: 'pending' });
+    save();
+    document.getElementById('applyMsg').textContent = '✅ Заявка принята! Ожидайте.';
+    document.getElementById('applyName').value = '';
+    document.getElementById('applyUsername').value = '';
 }
 
+// ПРОЧЕЕ
 function verify() {
     var c = prompt('Секретный код:');
     if (c === db.code) {
@@ -267,56 +514,34 @@ function verify() {
         }
         save();
         localStorage.setItem('dme', JSON.stringify(me));
-        loadProfile();
         alert('✅ Золотая галочка!');
+        loadSettings();
     } else {
         alert('❌ Неверный код');
     }
 }
 
-function logout() {
-    localStorage.removeItem('dme');
-    me = null;
-    show('welcome');
-}
-
-// КАНАЛЫ
-function openChannel(type) {
-    var box = document.getElementById('chatBox');
-    if (type === 'support') {
-        box.innerHTML = '<b>🛟 Поддержка:</b><p>Здравствуйте! @Durov поможет.</p>';
-    } else {
-        box.innerHTML = '<b>📰 Новости:</b><p>Добро пожаловать в Danilah Elite!</p>';
-    }
-    show('chat');
-}
-
-// ЧАТ
-function sendMsg() {
-    var m = document.getElementById('msgInput').value.trim();
-    if (!m || !me) return;
-    document.getElementById('chatBox').innerHTML += '<p><b>' + me.name + ':</b> ' + m + '</p>';
-    document.getElementById('msgInput').value = '';
-}
-
-// СОЗДАТЬ ЧАТ
-function createGroup() {
-    var n = document.getElementById('chatName').value.trim();
-    if (!n) return;
-    document.getElementById('chatMsg').textContent = '✅ Чат "' + n + '" создан!';
-    document.getElementById('chatName').value = '';
-}
-
-// ЗВОНКИ
 function call(type) {
     document.getElementById('callStatus').textContent = '📞 Вызов...';
     setTimeout(function() { document.getElementById('callStatus').textContent = '📞 Разговор...'; }, 2000);
     setTimeout(function() { document.getElementById('callStatus').textContent = '📞 Завершён'; }, 5000);
 }
 
+function logout() {
+    localStorage.removeItem('dme');
+    me = null;
+    closeMenu();
+    hideAll();
+    showPage('welcomePage');
+}
+
 // СТАРТ
-if (me) show('channels');
-else show('welcome');
+if (me) {
+    showMain();
+} else {
+    hideAll();
+    showPage('welcomePage');
+}
 </script>
 </body>
-    </html>
+        </html>
