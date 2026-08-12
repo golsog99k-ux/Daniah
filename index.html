@@ -3,178 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danilah Elite v6.0</title>
+    <title>Danilah Elite</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             background:#0a0a12;
             color:#fff;
-            font-family:Arial,sans-serif;
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
             margin:0;
             touch-action:manipulation;
             -webkit-tap-highlight-color:transparent;
             -webkit-user-select:none;
             user-select:none;
-            overflow-x:hidden;
         }
-        
-        .app {
-            max-width:480px;
-            margin:0 auto;
-            min-height:100vh;
-            position:relative;
-        }
-        
+        .app { max-width:480px; margin:0 auto; min-height:100vh; position:relative; }
+
         /* ШАПКА */
         .header {
-            background:#1a0f2e;
-            padding:14px;
+            background:linear-gradient(180deg,#1a0f2e,#0f0820);
+            padding:12px 16px;
             display:flex;
             align-items:center;
             justify-content:space-between;
-            border-bottom:1px solid #333;
+            border-bottom:1px solid #2a2a38;
             position:sticky;
             top:0;
             z-index:10;
         }
-        .header h1 {
+        .header .logo {
             font-size:20px;
-            color:#a78bfa;
-            margin:0;
+            font-weight:800;
+            letter-spacing:2px;
+            background:linear-gradient(to right,#c084fc,#e9a5d4);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
         }
         .menu-btn {
             background:none;
             border:none;
             color:#fff;
-            font-size:24px;
+            font-size:22px;
             cursor:pointer;
             padding:4px 8px;
         }
-        
+
         /* СТРАНИЦЫ */
         .page { display:none; }
         .page.on { display:block; }
-        
+
         /* БОКОВОЕ МЕНЮ */
         .sidebar {
             position:fixed;
             top:0;
             left:-280px;
-            width:260px;
-            height:100%;
+            width:270px;
+            height:100vh;
             background:#141420;
             z-index:100;
-            transition:left 0.3s;
-            padding-top:20px;
+            transition:left 0.25s;
             overflow-y:auto;
+            padding-bottom:20px;
         }
         .sidebar.open { left:0; }
-        .sidebar-overlay {
+        .overlay {
             position:fixed;
             top:0;left:0;right:0;bottom:0;
-            background:rgba(0,0,0,0.5);
+            background:rgba(0,0,0,0.6);
             z-index:99;
             display:none;
         }
-        .sidebar-overlay.show { display:block; }
-        
-        .sidebar .menu-item {
-            display:flex;
-            align-items:center;
-            gap:12px;
-            padding:14px 20px;
-            cursor:pointer;
-            font-size:16px;
-            border:none;
-            background:none;
-            color:#fff;
-            width:100%;
-            text-align:left;
+        .overlay.show { display:block; }
+
+        .sidebar .prof {
+            background:linear-gradient(135deg,#1a0f2e,#2a1a3e);
+            padding:20px 16px;
+            text-align:center;
         }
-        .sidebar .menu-item:active { background:#2a2a38; }
-        
-        .sidebar .profile-box {
-            padding:20px;
-            background:#1a1a28;
-            margin-bottom:10px;
+        .sidebar .prof .av {
+            width:70px;height:70px;border-radius:50%;
+            background:#7c3aed;margin:0 auto 10px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:32px;overflow:hidden;
         }
-        
+        .sidebar .prof .av img { width:100%;height:100%;object-fit:cover; }
+        .sidebar .mi {
+            display:flex;align-items:center;gap:12px;
+            padding:14px 20px;font-size:15px;cursor:pointer;
+            border:none;background:none;color:#fff;width:100%;text-align:left;
+        }
+        .sidebar .mi:active { background:#2a2a38; }
+
         /* КНОПКИ */
         button {
-            display:block;
-            width:100%;
-            padding:14px;
-            margin:6px 0;
-            font-size:15px;
-            font-weight:bold;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;
+            display:block;width:100%;padding:14px;margin:6px 0;
+            font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;
         }
         .bp { background:#7c3aed; color:#fff; }
-        .bo { background:transparent; border:2px solid #8b5cf6; color:#8b5cf6; }
+        .bo { background:transparent; border:2px solid #7c3aed; color:#a78bfa; }
         .bg { background:#f59e0b; color:#000; }
         .br { background:#ef4444; color:#fff; }
         .bb { background:#06b6d4; color:#000; }
-        
+        .bs { background:#22c55e; color:#000; }
+
         input {
-            display:block;
-            width:100%;
-            padding:13px;
-            margin:6px 0;
-            background:#111;
-            border:1px solid #333;
-            color:#fff;
-            font-size:15px;
-            border-radius:8px;
+            display:block;width:100%;padding:14px;margin:6px 0;
+            background:#0d0d18;border:1px solid #2a2a38;color:#fff;
+            font-size:15px;border-radius:10px;outline:none;
         }
-        
+        input:focus { border-color:#7c3aed; }
+
         .box {
-            background:#1a1a28;
-            border-radius:12px;
-            padding:14px;
-            margin:8px 0;
+            background:#141420;border-radius:14px;
+            padding:14px;margin:8px 0;border:1px solid #2a2a38;
         }
-        
-        .sm { font-size:12px; color:#999; }
-        .er { color:#ef4444; }
-        .ok { color:#22c55e; }
-        
+        .sm { font-size:12px; color:#9ca3af; }
+        .er { color:#ef4444; font-size:13px; }
+        .ok { color:#22c55e; font-size:13px; }
+        .content { padding:14px; }
+
         .list-item {
-            display:flex;
-            align-items:center;
-            gap:12px;
-            padding:14px;
-            background:#1a1a28;
-            border-radius:12px;
-            margin:6px 0;
-            cursor:pointer;
+            display:flex;align-items:center;gap:12px;
+            padding:14px;background:#141420;border-radius:14px;
+            margin:6px 0;cursor:pointer;border:1px solid #2a2a38;
         }
-        .list-item:active { background:#2a2a38; }
-        
+        .list-item:active { background:#1e1e2e; }
+
         .avatar {
-            width:46px;
-            height:46px;
-            border-radius:50%;
-            background:#7c3aed;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:20px;
-            flex-shrink:0;
+            width:46px;height:46px;border-radius:50%;
+            background:#7c3aed;display:flex;align-items:center;justify-content:center;
+            font-size:20px;flex-shrink:0;overflow:hidden;
         }
-        
-        .badge {
-            display:inline-block;
-            padding:3px 8px;
-            border-radius:12px;
-            font-size:11px;
-            margin:2px;
-        }
+        .avatar img { width:100%;height:100%;object-fit:cover; }
+
+        .badge { display:inline-block;padding:3px 8px;border-radius:12px;font-size:11px;margin:2px; }
         .bv { background:rgba(245,158,11,0.2); color:#f59e0b; }
         .bprem { background:rgba(6,182,212,0.2); color:#06b6d4; }
-        
-        .content { padding:14px; }
+
+        .badge-unread {
+            background:#ef4444;color:#fff;border-radius:12px;
+            padding:2px 8px;font-size:11px;margin-left:auto;
+        }
+        .divider {
+            height:1px;background:#2a2a38;margin:10px 0;
+        }
     </style>
 </head>
 <body>
@@ -182,172 +153,167 @@
 <div class="app">
 
     <!-- БОКОВОЕ МЕНЮ -->
-    <div class="sidebar-overlay" id="overlay" onclick="closeMenu()"></div>
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
     <div class="sidebar" id="sidebar">
-        <div class="profile-box">
-            <div style="font-size:40px;" id="mEmoji">👤</div>
-            <b id="mName">Имя</b>
+        <div class="prof">
+            <div class="av" id="mAv">👤</div>
+            <b id="mName" style="font-size:16px;">Имя</b>
             <p class="sm" id="mUser">@user</p>
             <div id="mBadges"></div>
         </div>
-        <button class="menu-item" onclick="openMenuPage('chats')">💬 Чаты</button>
-        <button class="menu-item" onclick="openMenuPage('contacts')">👥 Контакты</button>
-        <button class="menu-item" onclick="openMenuPage('channels')">📢 Каналы</button>
-        <button class="menu-item" onclick="openMenuPage('calls')">📞 Звонки</button>
-        <button class="menu-item" onclick="openMenuPage('settings')">⚙️ Настройки</button>
-        <button class="menu-item" onclick="openMenuPage('support')">🛟 Поддержка</button>
-        <button class="menu-item" onclick="logout()" style="color:#ef4444;">🚪 Выйти</button>
+        <div class="divider"></div>
+        <button class="mi" onclick="openPage('chats')">💬 Чаты</button>
+        <button class="mi" onclick="openPage('contacts')">👥 Контакты</button>
+        <button class="mi" onclick="openPage('channels')">📢 Каналы</button>
+        <button class="mi" onclick="openPage('calls')">📞 Звонки</button>
+        <button class="mi" onclick="openPage('settings')">⚙️ Настройки</button>
+        <button class="mi" onclick="openPage('about')">ℹ️ О Danilah</button>
+        <div class="divider"></div>
+        <button class="mi" onclick="openPage('admin')" id="adminBtn" style="display:none;">👑 Админ-панель</button>
+        <button class="mi" onclick="logout()" style="color:#ef4444;">🚪 Выйти</button>
     </div>
 
     <!-- ГЛАВНЫЙ ЭКРАН -->
-    <div id="mainPage">
-        <div class="header">
-            <button class="menu-btn" onclick="openMenu()">☰</button>
-            <h1>DANILAH</h1>
-            <span style="font-size:20px;">🔐</span>
-        </div>
-        <div class="content" id="mainContent">
-            <!-- Здесь будут чаты -->
-        </div>
+    <div class="header" id="mainHeader">
+        <button class="menu-btn" onclick="openMenu()">☰</button>
+        <span class="logo">DANILAH</span>
+        <span style="font-size:20px;">👑</span>
     </div>
+    <div class="content" id="mainContent"></div>
 
     <!-- ПРИВЕТСТВИЕ -->
     <div class="page on" id="welcomePage">
-        <div class="content" style="text-align:center;padding-top:80px;">
-            <p style="font-size:70px;">🔐</p>
-            <h1 style="color:#a78bfa;margin:20px 0;">DANILAH</h1>
-            <p>Добро пожаловать в Danilah</p>
-            <p class="sm">Закрытая экосистема</p>
-            <br>
-            <button class="bp" onclick="showLoginChoice()">🚀 Начать</button>
+        <div style="text-align:center;padding:80px 20px;">
+            <p style="font-size:70px;">👑</p>
+            <h1 style="color:#a78bfa;font-size:28px;margin:15px 0;">DANILAH</h1>
+            <p style="font-size:16px;">Элитный мессенджер</p>
+            <p class="sm">Закрытая экосистема @Durov</p>
+            <br><br>
+            <button class="bp" onclick="showLogin()">🚀 Начать</button>
         </div>
     </div>
 
-    <!-- ВЫБОР ВХОДА -->
-    <div class="page" id="loginChoicePage">
-        <div class="content" style="padding-top:60px;">
-            <h1 style="color:#a78bfa;text-align:center;">DANILAH</h1>
-            <p style="text-align:center;">Выберите способ входа</p>
+    <!-- ВХОД -->
+    <div class="page" id="loginPage">
+        <div style="padding:30px 20px;">
+            <h2 style="color:#a78bfa;text-align:center;">DANILAH</h2>
+            <p style="text-align:center;" class="sm">Выберите способ входа</p>
             <br>
             <button class="bp" onclick="showPhone()">📱 По номеру телефона</button>
-            <p class="sm" style="text-align:center;">Быстрый вход</p>
             <button class="bo" onclick="showCode()">🔐 По коду</button>
-            <p class="sm" style="text-align:center;">Займет больше времени</p>
-            <br>
-            <button class="bo" onclick="showApply()">🆘 Нет кода — заявка</button>
+            <button class="bo" onclick="showApply()">🆘 Запросить код</button>
         </div>
     </div>
 
-    <!-- ВХОД ПО ТЕЛЕФОНУ -->
+    <!-- ТЕЛЕФОН -->
     <div class="page" id="phonePage">
         <div class="content">
-            <h2 style="color:#a78bfa;">📱 Телефон</h2>
+            <h2 style="color:#a78bfa;">📱 Номер телефона</h2>
             <input type="tel" id="phone" placeholder="+7 999 123-45-67">
-            <button class="bp" onclick="getSMS()">Получить код</button>
-            <div id="smsArea" style="display:none;">
-                <input type="text" id="smsCode" placeholder="Код из SMS">
-                <button class="bp" onclick="checkSMS()">Подтвердить</button>
+            <button class="bp" onclick="sendSMS()">Получить код подтверждения</button>
+            <div id="smsBox" style="display:none;">
+                <input type="text" id="smsInput" placeholder="Код из SMS">
+                <button class="bp" onclick="verifySMS()">Подтвердить</button>
             </div>
-            <p class="ok" id="phoneMsg"></p>
-            <button class="bo" onclick="backToChoice()">← Назад</button>
+            <p class="ok" id="smsMsg"></p>
+            <button class="bo" onclick="showLogin()">← Назад</button>
         </div>
     </div>
 
-    <!-- ВХОД ПО КОДУ -->
+    <!-- КОД -->
     <div class="page" id="codePage">
         <div class="content">
             <h2 style="color:#a78bfa;">🔐 Вход по коду</h2>
+            <p class="sm">Сначала введите код, затем @Username</p>
+            <input type="text" id="accessCode" placeholder="Код доступа">
             <input type="text" id="loginUser" placeholder="@Username">
-            <input type="password" id="loginPass" placeholder="Код-пароль">
-            <button class="bp" onclick="login()">Войти</button>
+            <button class="bp" onclick="loginWithCode()">Войти</button>
             <p class="er" id="loginErr"></p>
-            <button class="bo" onclick="backToChoice()">← Назад</button>
+            <button class="bo" onclick="showLogin()">← Назад</button>
         </div>
     </div>
 
     <!-- ЗАЯВКА -->
     <div class="page" id="applyPage">
         <div class="content">
-            <h2 style="color:#a78bfa;">🆘 Заявка</h2>
-            <p class="sm">@Durov выдаст вам код</p>
+            <h2 style="color:#a78bfa;">🆘 Заявка на доступ</h2>
+            <p class="sm">@Durov выдаст вам код доступа</p>
             <input type="text" id="applyName" placeholder="Ваше имя">
-            <input type="text" id="applyUsername" placeholder="@Username">
-            <button class="bp" onclick="apply()">Отправить</button>
-            <p class="ok" id="applyMsg"></p>
-            <button class="bo" onclick="backToChoice()">← Назад</button>
+            <input type="text" id="applyUser" placeholder="Желаемый @Username">
+            <button class="bp" onclick="submitApply()">Отправить</button>
+            <p class="ok" id="applyOk"></p>
+            <button class="bo" onclick="showLogin()">← Назад</button>
         </div>
     </div>
 
 </div>
 
 <script>
-// БАЗА
+// ========== БАЗА ==========
 var db = JSON.parse(localStorage.getItem('ddb')) || {
-    users: [{ id: 'o1', name: 'Владелец', username: '@Durov', password: 'admin123', role: 'owner', status: 'premium', verified: true, emoji: '👑' }],
+    users: [
+        { id:'o1', name:'Владелец', username:'@Durov', password:'admin123', accessCode:'QQO1098', role:'owner', status:'premium', verified:true, emoji:'👑', phone:'' }
+    ],
+    apps: [],
+    msgs: [],
     code: 'QQO1098',
     sms: {},
-    msgs: [{ from: '@Durov', to: 'all', text: 'Добро пожаловать в Danilah!', time: new Date().toISOString() }]
+    updates: [
+        { title:'🎉 Danilah Elite запущен!', desc:'Добро пожаловать в элитный мессенджер.', date:'2024-01-01' },
+        { title:'💎 Premium-статус', desc:'Эксклюзивные возможности для избранных.', date:'2024-01-15' },
+        { title:'🌐 Мультиязычность', desc:'Поддержка 8+ языков.', date:'2024-02-01' }
+    ]
 };
 
 function save() { localStorage.setItem('ddb', JSON.stringify(db)); }
 var me = JSON.parse(localStorage.getItem('dme')) || null;
 
-function showPage(id) {
-    var pages = document.querySelectorAll('.page');
-    for (var i = 0; i < pages.length; i++) pages[i].classList.remove('on');
-    var el = document.getElementById(id);
-    if (el) el.classList.add('on');
+// ========== НАВИГАЦИЯ ==========
+function hidePages() {
+    var ps = document.querySelectorAll('.page');
+    for (var i=0;i<ps.length;i++) ps[i].classList.remove('on');
 }
 
-function hideAll() {
-    var pages = document.querySelectorAll('.page');
-    for (var i = 0; i < pages.length; i++) pages[i].classList.remove('on');
-    document.getElementById('mainPage').style.display = 'none';
-}
-
-function showMain() {
-    hideAll();
-    document.getElementById('mainPage').style.display = 'block';
-    loadChats();
-}
-
-function showLoginChoice() {
-    hideAll();
-    showPage('loginChoicePage');
+function showLogin() {
+    hidePages();
+    document.getElementById('loginPage').classList.add('on');
 }
 
 function showPhone() {
-    hideAll();
-    showPage('phonePage');
+    hidePages();
+    document.getElementById('phonePage').classList.add('on');
 }
 
 function showCode() {
-    hideAll();
-    showPage('codePage');
+    hidePages();
+    document.getElementById('codePage').classList.add('on');
 }
 
 function showApply() {
-    hideAll();
-    showPage('applyPage');
+    hidePages();
+    document.getElementById('applyPage').classList.add('on');
 }
 
-function backToChoice() {
-    hideAll();
-    showPage('loginChoicePage');
+function showMain() {
+    hidePages();
+    document.getElementById('mainHeader').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'block';
+    loadChats();
 }
 
-// МЕНЮ
 function openMenu() {
     document.getElementById('sidebar').classList.add('open');
     document.getElementById('overlay').classList.add('show');
     if (me) {
-        document.getElementById('mEmoji').textContent = me.emoji || '👤';
+        document.getElementById('mAv').textContent = me.emoji || '👤';
         document.getElementById('mName').textContent = me.name;
         document.getElementById('mUser').textContent = me.username;
         var b = '';
         if (me.verified) b += '<span class="badge bv">⭐</span> ';
-        if (me.status === 'premium') b += '<span class="badge bprem">💎</span> ';
+        if (me.status === 'premium') b += '<span class="badge bprem">💎 Premium</span> ';
         document.getElementById('mBadges').innerHTML = b;
+        if (me.role === 'owner') document.getElementById('adminBtn').style.display = 'flex';
+        else document.getElementById('adminBtn').style.display = 'none';
     }
 }
 
@@ -356,192 +322,169 @@ function closeMenu() {
     document.getElementById('overlay').classList.remove('show');
 }
 
-function openMenuPage(page) {
+function openPage(page) {
     closeMenu();
     if (page === 'chats') loadChats();
     if (page === 'contacts') loadContacts();
     if (page === 'channels') loadChannels();
     if (page === 'calls') loadCalls();
     if (page === 'settings') loadSettings();
-    if (page === 'support') loadSupport();
+    if (page === 'about') loadAbout();
+    if (page === 'admin') loadAdmin();
 }
 
-// ЗАГРУЗКА СТРАНИЦ
+// ========== СТРАНИЦЫ ==========
 function loadChats() {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">💬 Чаты</h2>' +
-        '<div class="list-item" onclick="openChat(\'Общий чат\')"><div class="avatar">💬</div><div><b>Общий чат</b><p class="sm">' + (db.msgs.length || 0) + ' сообщений</p></div></div>' +
-        '<div class="list-item" onclick="openChat(\'Поддержка\')"><div class="avatar">🛟</div><div><b>Поддержка Danilah</b><p class="sm">@Durov</p></div></div>';
+    var h = '<h2 style="color:#a78bfa;margin-bottom:10px;">💬 Чаты</h2>';
+    
+    // Чат с поддержкой
+    h += '<div class="list-item" onclick="openChat(\'@Durov\',\'Поддержка\')">' +
+        '<div class="avatar">🛟</div>' +
+        '<div style="flex:1;"><b>Поддержка Danilah</b><p class="sm">@Durov • онлайн</p></div>' +
+        '</div>';
+    
+    // Контакты
+    for (var i=0;i<db.users.length;i++) {
+        var u = db.users[i];
+        if (u.id !== me.id) {
+            h += '<div class="list-item" onclick="openChat(\'' + u.username + '\',\'' + u.name + '\')">' +
+                '<div class="avatar">' + (u.emoji || '👤') + '</div>' +
+                '<div style="flex:1;"><b>' + u.name + '</b> ' + (u.verified?'⭐':'') + (u.status==='premium'?'💎':'') +
+                '<p class="sm">' + u.username + '</p></div></div>';
+        }
+    }
+    c.innerHTML = h;
 }
 
 function loadContacts() {
     var c = document.getElementById('mainContent');
-    var h = '<h2 style="color:#a78bfa;">👥 Контакты</h2>';
-    for (var i = 0; i < db.users.length; i++) {
+    var h = '<h2 style="color:#a78bfa;margin-bottom:10px;">👥 Контакты</h2>';
+    for (var i=0;i<db.users.length;i++) {
         var u = db.users[i];
-        h += '<div class="list-item"><div class="avatar">' + (u.emoji || '👤') + '</div><div><b>' + u.name + '</b> ' + (u.verified ? '⭐' : '') + (u.status === 'premium' ? '💎' : '') + '<p class="sm">' + u.username + '</p></div></div>';
+        h += '<div class="list-item" onclick="openChat(\'' + u.username + '\',\'' + u.name + '\')">' +
+            '<div class="avatar">' + (u.emoji || '👤') + '</div>' +
+            '<div style="flex:1;"><b>' + u.name + '</b> ' + (u.verified?'⭐':'') + (u.status==='premium'?'💎':'') +
+            '<p class="sm">' + u.username + '</p></div></div>';
     }
     c.innerHTML = h;
 }
 
 function loadChannels() {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">📢 Каналы</h2>' +
-        '<div class="list-item" onclick="openChannel(\'support\')"><div class="avatar">🛟</div><div><b>Поддержка Danilah</b><p class="sm">Официальный канал</p></div></div>' +
-        '<div class="list-item" onclick="openChannel(\'news\')"><div class="avatar">📰</div><div><b>Новости Danilah</b><p class="sm">Обновления и анонсы</p></div></div>';
+    var h = '<h2 style="color:#a78bfa;margin-bottom:10px;">📢 Каналы</h2>';
+    
+    // Канал заявок (только для владельца)
+    if (me && me.role === 'owner') {
+        var pending = db.apps.length || 0;
+        h += '<div class="list-item" onclick="loadAdmin(\'apps\')">' +
+            '<div class="avatar">📋</div>' +
+            '<div style="flex:1;"><b>Заявки на доступ</b><p class="sm">' + pending + ' ожидают</p></div>' +
+            (pending > 0 ? '<span class="badge-unread">' + pending + '</span>' : '') + '</div>';
+    }
+    
+    h += '<div class="list-item" onclick="openChannel(\'news\')"><div class="avatar">📰</div><div style="flex:1;"><b>Новости Danilah</b><p class="sm">Обновления и анонсы</p></div></div>';
+    h += '<div class="list-item" onclick="openChannel(\'updates\')"><div class="avatar">🔄</div><div style="flex:1;"><b>Что нового?</b><p class="sm">История обновлений</p></div></div>';
+    c.innerHTML = h;
 }
 
 function loadCalls() {
     var c = document.getElementById('mainContent');
     c.innerHTML = '<h2 style="color:#a78bfa;">📞 Звонки</h2><div class="box" style="text-align:center;">' +
         '<p style="font-size:50px;">📞</p>' +
-        '<button class="bp" onclick="call(\'audio\')">📞 Аудиозвонок</button>' +
-        '<button class="bb" onclick="call(\'video\')">📹 Видеозвонок</button>' +
+        '<button class="bp" onclick="startCall(\'audio\')">📞 Аудиозвонок</button>' +
+        '<button class="bb" onclick="startCall(\'video\')">📹 Видеозвонок</button>' +
         '<p class="sm" id="callStatus"></p></div>';
 }
 
 function loadSettings() {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">⚙️ Настройки</h2>' +
-        '<div class="box"><b>Аккаунт</b><p class="sm">' + (me ? me.name + ' (' + me.username + ')' : '') + '</p></div>' +
-        '<button class="bp" onclick="verify()">🎫 Активировать код</button>' +
-        '<button class="bo" onclick="alert(\'💎 Premium — свяжитесь с @Durov\')">💎 Хочу Premium</button>' +
-        '<button class="br" onclick="logout()">🚪 Выйти</button>';
+    var h = '<h2 style="color:#a78bfa;">⚙️ Настройки</h2>';
+    h += '<div class="box"><b>' + me.name + '</b> ' + (me.verified?'⭐':'') + (me.status==='premium'?'💎':'') +
+        '<p class="sm">' + me.username + '</p></div>';
+    h += '<button class="bp" onclick="activateCode()">🎫 Активировать код</button>';
+    if (me.role === 'owner') {
+        h += '<div class="box"><b>👑 Владелец</b><p class="sm">Вы можете выдавать Premium</p>' +
+        '<button class="bb" onclick="givePremium()">💎 Выдать Premium</button></div>';
+    } else {
+        h += '<button class="bo" onclick="alert(\'💎 Premium — свяжитесь с @Durov\')">💎 Хочу Premium</button>';
+    }
+    h += '<button class="br" onclick="logout()">🚪 Выйти</button>';
+    c.innerHTML = h;
 }
 
-function loadSupport() {
+function loadAbout() {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2>' +
-        '<div class="box"><b>Свяжитесь с @Durov</b>' +
-        '<button class="bp" onclick="openChat(\'Поддержка\')">💬 Написать</button></div>';
+    var h = '<h2 style="color:#a78bfa;">ℹ️ О Danilah</h2>';
+    h += '<div class="box"><b>Danilah Elite Messenger</b>' +
+        '<p class="sm">Версия 6.0</p>' +
+        '<p class="sm">Закрытая экосистема @Durov</p></div>';
+    for (var i=0;i<db.updates.length;i++) {
+        var u = db.updates[i];
+        h += '<div class="box"><b>' + u.title + '</b><p class="sm">' + u.desc + '</p><p class="sm">' + u.date + '</p></div>';
+    }
+    c.innerHTML = h;
 }
 
-// ЧАТ
-function openChat(name) {
+function loadAdmin(tab) {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">💬 ' + name + '</h2>' +
-        '<div class="box" id="chatBox" style="height:250px;overflow-y:auto;text-align:left;">' +
-        '<p class="sm">Начните переписку...</p></div>' +
-        '<div style="display:flex;gap:5px;"><input type="text" id="msgInput" placeholder="Сообщение..." style="flex:1;">' +
-        '<button class="bp" onclick="sendMsg()" style="width:auto;">➤</button></div>' +
+    var h = '<h2 style="color:#a78bfa;">👑 Админ-панель</h2>';
+    h += '<div style="display:flex;gap:4px;margin-bottom:10px;">' +
+        '<button class="bp" style="flex:1;font-size:12px;padding:10px;" onclick="loadAdmin(\'apps\')">📋 Заявки</button>' +
+        '<button class="bo" style="flex:1;font-size:12px;padding:10px;" onclick="loadAdmin(\'users\')">👥 Люди</button>' +
+        '<button class="bg" style="flex:1;font-size:12px;padding:10px;" onclick="loadAdmin(\'codes\')">🔑 Коды</button></div>';
+    
+    if (tab === 'apps' || !tab) {
+        if (!db.apps.length) h += '<p class="sm">Нет заявок</p>';
+        for (var i=0;i<db.apps.length;i++) {
+            var a = db.apps[i];
+            h += '<div class="box"><b>' + a.name + '</b> — ' + a.username + '<br>' +
+                '<button class="bp" onclick="approveApp(\'' + i + '\')" style="display:inline-block;width:auto;margin:4px;">✅ Принять</button>' +
+                '<button class="br" onclick="rejectApp(\'' + i + '\')" style="display:inline-block;width:auto;margin:4px;">❌ Отклонить</button></div>';
+        }
+    }
+    if (tab === 'users') {
+        for (var i=0;i<db.users.length;i++) {
+            var u = db.users[i];
+            h += '<div class="box"><b>' + u.name + '</b> ' + (u.verified?'⭐':'') + (u.status==='premium'?'💎':'') +
+                '<p class="sm">' + u.username + '</p>' +
+                '<button class="bp" onclick="toggleVerify(\'' + u.id + '\')" style="display:inline-block;width:auto;margin:3px;">' + (u.verified?'Снять ⭐':'Выдать ⭐') + '</button>' +
+                '<button class="bb" onclick="togglePremium(\'' + u.id + '\')" style="display:inline-block;width:auto;margin:3px;">' + (u.status==='premium'?'Снять 💎':'Выдать 💎') + '</button>' +
+                '</div>';
+        }
+    }
+    if (tab === 'codes') {
+        h += '<div class="box"><b>Код доступа:</b> ' + db.code + '<br>' +
+            '<input type="text" id="newCode" placeholder="Новый код">' +
+            '<button class="bg" onclick="updateCode()">Изменить</button></div>';
+    }
+    c.innerHTML = h;
+}
+
+// ========== ЧАТ ==========
+function openChat(username, name) {
+    var c = document.getElementById('mainContent');
+    var msgs = [];
+    for (var i=0;i<db.msgs.length;i++) {
+        var m = db.msgs[i];
+        if ((m.from === me.username && m.to === username) || (m.from === username && m.to === me.username)) {
+            msgs.push(m);
+        }
+    }
+    var h = '<h2 style="color:#a78bfa;">💬 ' + name + '</h2>';
+    h += '<div class="box" style="height:250px;overflow-y:auto;text-align:left;" id="chatBox">';
+    if (!msgs.length) h += '<p class="sm">Начните переписку...</p>';
+    for (var j=0;j<msgs.length;j++) {
+        var m = msgs[j];
+        h += '<p style="margin:4px 0;"><b>' + m.from + ':</b> ' + m.text + '</p>';
+    }
+    h += '</div>';
+    h += '<div style="display:flex;gap:5px;"><input type="text" id="msgInput" placeholder="Сообщение..." style="flex:1;">' +
+        '<button class="bp" onclick="sendMsg(\'' + username + '\')" style="width:auto;">➤</button></div>' +
         '<button class="bo" onclick="loadChats()">← Назад</button>';
+    c.innerHTML = h;
 }
 
-function sendMsg() {
-    var m = document.getElementById('msgInput').value.trim();
-    if (!m || !me) return;
-    var box = document.getElementById('chatBox');
-    box.innerHTML += '<p><b>' + me.name + ':</b> ' + m + '</p>';
-    document.getElementById('msgInput').value = '';
-    box.scrollTop = box.scrollHeight;
-}
-
-function openChannel(type) {
-    var c = document.getElementById('mainContent');
-    if (type === 'support') {
-        c.innerHTML = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2><div class="box"><p>Здравствуйте! @Durov поможет.</p></div><button class="bo" onclick="loadChannels()">← Назад</button>';
-    } else {
-        c.innerHTML = '<h2 style="color:#a78bfa;">📰 Новости</h2><div class="box"><p>Добро пожаловать в Danilah Elite!</p></div><button class="bo" onclick="loadChannels()">← Назад</button>';
-    }
-}
-
-// SMS
-function getSMS() {
-    var ph = document.getElementById('phone').value.replace(/\D/g, '');
-    if (ph.length < 10) { alert('Введите номер'); return; }
-    var code = Math.floor(100000 + Math.random() * 900000).toString();
-    db.sms[ph] = code;
-    save();
-    document.getElementById('smsArea').style.display = 'block';
-    document.getElementById('phoneMsg').textContent = '📱 Демо-код: ' + code;
-}
-
-function checkSMS() {
-    var ph = document.getElementById('phone').value.replace(/\D/g, '');
-    var code = document.getElementById('smsCode').value.trim();
-    if (db.sms[ph] === code) {
-        var found = null;
-        for (var i = 0; i < db.users.length; i++) {
-            if (db.users[i].phone === ph) found = db.users[i];
-        }
-        if (!found) {
-            found = { id: 'u' + Date.now(), name: 'Пользователь', username: '@user' + ph.slice(-4), password: 'pass' + Date.now().toString(36), role: 'user', status: 'basic', verified: false, emoji: '👤', phone: ph };
-            db.users.push(found);
-            save();
-        }
-        me = found;
-        localStorage.setItem('dme', JSON.stringify(me));
-        showMain();
-    } else {
-        alert('Неверный код');
-    }
-}
-
-// ВХОД
-function login() {
-    var u = document.getElementById('loginUser').value.trim();
-    var p = document.getElementById('loginPass').value.trim();
-    var found = null;
-    for (var i = 0; i < db.users.length; i++) {
-        if (db.users[i].username === u && db.users[i].password === p) found = db.users[i];
-    }
-    if (!found) { document.getElementById('loginErr').textContent = 'Неверный логин или пароль'; return; }
-    me = found;
-    localStorage.setItem('dme', JSON.stringify(me));
-    showMain();
-}
-
-// ЗАЯВКА
-function apply() {
-    var n = document.getElementById('applyName').value.trim();
-    var u = document.getElementById('applyUsername').value.trim();
-    if (!n || !u) { alert('Заполните поля'); return; }
-    if (!db.apps) db.apps = [];
-    db.apps.push({ name: n, username: u, status: 'pending' });
-    save();
-    document.getElementById('applyMsg').textContent = '✅ Заявка принята! Ожидайте.';
-    document.getElementById('applyName').value = '';
-    document.getElementById('applyUsername').value = '';
-}
-
-// ПРОЧЕЕ
-function verify() {
-    var c = prompt('Секретный код:');
-    if (c === db.code) {
-        me.verified = true;
-        for (var i = 0; i < db.users.length; i++) {
-            if (db.users[i].id === me.id) { db.users[i].verified = true; break; }
-        }
-        save();
-        localStorage.setItem('dme', JSON.stringify(me));
-        alert('✅ Золотая галочка!');
-        loadSettings();
-    } else {
-        alert('❌ Неверный код');
-    }
-}
-
-function call(type) {
-    document.getElementById('callStatus').textContent = '📞 Вызов...';
-    setTimeout(function() { document.getElementById('callStatus').textContent = '📞 Разговор...'; }, 2000);
-    setTimeout(function() { document.getElementById('callStatus').textContent = '📞 Завершён'; }, 5000);
-}
-
-function logout() {
-    localStorage.removeItem('dme');
-    me = null;
-    closeMenu();
-    hideAll();
-    showPage('welcomePage');
-}
-
-// СТАРТ
-if (me) {
-    showMain();
-} else {
-    hideAll();
-    showPage('welcomePage');
-}
-</script>
-</body>
-        </html>
+function sendMsg(to) {
+    var inp = document.getElementById('msgInput');
+    var txt = inp.value.tri
