@@ -22,9 +22,6 @@
             align-items:center;
             justify-content:space-between;
             border-bottom:2px solid #7c3aed;
-            position:sticky;
-            top:0;
-            z-index:10;
         }
         .logo { font-size:20px; font-weight:800; color:#a78bfa; }
         .menu-btn { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; }
@@ -47,8 +44,7 @@
         .bg { background:#f59e0b; color:#000; }
         .br { background:#ef4444; color:#fff; }
         .bb { background:#06b6d4; color:#000; }
-        .bs { background:#22c55e; color:#000; }
-        input, select {
+        input {
             display:block;
             width:100%;
             padding:14px;
@@ -67,40 +63,6 @@
             border:1px solid #2a2a38;
         }
         .sm { font-size:12px; color:#9ca3af; }
-        .sidebar {
-            position:fixed;
-            top:0;
-            left:-280px;
-            width:270px;
-            height:100vh;
-            background:#141420;
-            z-index:100;
-            transition:left 0.25s;
-            overflow-y:auto;
-        }
-        .sidebar.open { left:0; }
-        .overlay {
-            position:fixed;
-            top:0;left:0;right:0;bottom:0;
-            background:rgba(0,0,0,0.6);
-            z-index:99;
-            display:none;
-        }
-        .overlay.show { display:block; }
-        .mi {
-            display:flex;
-            align-items:center;
-            gap:12px;
-            padding:14px 20px;
-            font-size:15px;
-            cursor:pointer;
-            border:none;
-            background:none;
-            color:#fff;
-            width:100%;
-            text-align:left;
-        }
-        .mi:active { background:#2a2a38; }
         .list-item {
             display:flex;
             align-items:center;
@@ -112,7 +74,6 @@
             cursor:pointer;
             border:1px solid #2a2a38;
         }
-        .list-item:active { background:#1e1e2e; }
         .avatar {
             width:46px;
             height:46px;
@@ -124,9 +85,6 @@
             font-size:20px;
             flex-shrink:0;
         }
-        .badge { display:inline-block;padding:3px 8px;border-radius:12px;font-size:11px;margin:2px; }
-        .bv { background:rgba(245,158,11,0.2); color:#f59e0b; }
-        .bprem { background:rgba(6,182,212,0.2); color:#06b6d4; }
         .msg-ai {
             background:#1a1a28;
             border-left:3px solid #06b6d4;
@@ -158,29 +116,6 @@
 
 <div class="app">
 
-    <!-- БОКОВОЕ МЕНЮ -->
-    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
-    <div class="sidebar" id="sidebar">
-        <div style="padding:20px;text-align:center;background:linear-gradient(135deg,#1a0f2e,#2a1a4e);">
-            <div class="avatar" id="mAv" style="margin:0 auto 10px;width:70px;height:70px;font-size:32px;">🐉</div>
-            <b id="mName">Имя</b>
-            <p class="sm" id="mUser">@user</p>
-            <div id="mBadges"></div>
-            <p class="sm" id="mStars" style="color:#f59e0b;">⭐ 0 звёзд</p>
-        </div>
-        <button class="mi" onclick="openPage('chats')">💬 Чаты</button>
-        <button class="mi" onclick="openPage('ai')">🤖 Danilah AI</button>
-        <button class="mi" onclick="openPage('contacts')">👥 Контакты</button>
-        <button class="mi" onclick="openPage('channels')">📢 Каналы</button>
-        <button class="mi" onclick="openPage('ideas')">💡 Чат идей</button>
-        <button class="mi" onclick="openPage('calls')">📞 Звонки</button>
-        <button class="mi" onclick="openPage('settings')">⚙️ Настройки</button>
-        <button class="mi" onclick="openPage('about')">ℹ️ О Danilah</button>
-        <div style="border-top:1px solid #2a2a38;margin:8px 0;"></div>
-        <button class="mi" id="adminBtn" onclick="openPage('admin')" style="display:none;">👑 Админ-панель</button>
-        <button class="mi" onclick="logout()" style="color:#ef4444;">🚪 Выйти</button>
-    </div>
-
     <!-- ШАПКА -->
     <div class="header" id="mainHeader" style="display:none;">
         <button class="menu-btn" onclick="openMenu()">☰</button>
@@ -207,28 +142,10 @@
         <div style="padding:30px 20px;">
             <h2 style="color:#a78bfa;text-align:center;">🐉 DANILAH</h2>
             <p class="sm" style="text-align:center;">Выберите способ входа</p>
-            <div class="online-badge" id="onlineCount2">👥 Онлайн: 1</div>
             <br>
             <button class="bp" onclick="showPhone()">📱 По номеру телефона</button>
             <button class="bo" onclick="showCode()">🔐 По коду</button>
             <button class="bo" onclick="showAIHelp()">🤖 Нет кода — спросить ИИ</button>
-        </div>
-    </div>
-
-    <!-- ОБУЧЕНИЕ -->
-    <div class="page" id="tutorialPage">
-        <div class="content">
-            <h2 style="color:#a78bfa;">📖 Что такое Danilah?</h2>
-            <div class="box">
-                <p><b>Danilah</b> — элитный мессенджер для избранных.</p>
-                <br>
-                <p>🔐 <b>Вход:</b> по коду или телефону</p>
-                <p>💬 <b>Чаты:</b> общайтесь с контактами</p>
-                <p>🤖 <b>ИИ:</b> помощник по коду</p>
-                <p>⭐ <b>Звёзды:</b> валюта для подарков</p>
-                <p>👑 <b>Владелец:</b> @Durov</p>
-            </div>
-            <button class="bp" onclick="showMain()">✅ Понятно, продолжить</button>
         </div>
     </div>
 
@@ -240,7 +157,7 @@
                 <div class="msg-ai">👋 Привет! Я помощник по кодам. Я уже обработал твою заявку! В скором времени тебе ответит владелец с твоим кодом!</div>
             </div>
             <div style="display:flex;gap:5px;">
-                <input type="text" id="aiHelpInput" placeholder="Напишите сообщение..." style="flex:1;">
+                <input type="text" id="aiHelpInput" placeholder="Напишите..." style="flex:1;">
                 <button class="bp" onclick="sendAIHelp()" style="width:auto;">➤</button>
             </div>
             <button class="bo" onclick="showLogin()">← Назад</button>
@@ -253,10 +170,6 @@
             <h2 style="color:#a78bfa;">📱 Номер телефона</h2>
             <input type="tel" id="phone" placeholder="+7 999 123-45-67">
             <button class="bp" onclick="sendSMS()">Получить код</button>
-            <div id="smsBox" style="display:none;">
-                <input type="text" id="smsInput" placeholder="Код из SMS">
-                <button class="bp" onclick="verifySMS()">Подтвердить</button>
-            </div>
             <p class="sm" id="smsMsg"></p>
             <button class="bo" onclick="showLogin()">← Назад</button>
         </div>
@@ -266,7 +179,6 @@
     <div class="page" id="codePage">
         <div class="content">
             <h2 style="color:#a78bfa;">🔐 Вход по коду</h2>
-            <p class="sm">Сначала код, потом @Username</p>
             <input type="text" id="accessCode" placeholder="Код доступа">
             <input type="text" id="loginUser" placeholder="@Username">
             <button class="bp" onclick="loginWithCode()">Войти</button>
@@ -278,68 +190,26 @@
 </div>
 
 <script>
-// ========== БАЗА ДАННЫХ ==========
 var db = JSON.parse(localStorage.getItem('ddb')) || {
-    users: [
-        { id:'o1', name:'Владелец', username:'@Durov', password:'admin123', role:'owner', status:'premium', verified:true, emoji:'🐉', phone:'', stars:0, freeMessageUsed:false }
-    ],
-    apps: [],
-    msgs: [],
-    code: 'QQO1098',
-    sms: {},
-    announcements: [],
-    ideas: [],
-    gifts: [
-        { name:'🧸 Мишка', price:15 },
-        { name:'🎁 Подарок', price:25 },
-        { name:'💍 Колечко', price:50 },
-        { name:'🚀 Ракета', price:100 },
-        { name:'👑 Danilah', price:1000 }
-    ],
-    starPrices: [
-        { stars:100, price:50 },
-        { stars:150, price:100 },
-        { stars:200, price:150 },
-        { stars:500, price:450 },
-        { stars:1000, price:700 },
-        { stars:10000, price:'Запросить у создателя' }
-    ],
-    updates: [
-        { title:'🎉 Запуск', desc:'Danilah Elite запущен!' },
-        { title:'🤖 ИИ-помощник', desc:'ИИ отвечает на вопросы' },
-        { title:'⭐ Звёзды', desc:'Валюта и подарки' }
-    ]
+    users: [{ id:'o1', name:'Владелец', username:'@Durov', password:'admin123', role:'owner', status:'premium', verified:true, emoji:'🐉', phone:'', stars:0, freeMessageUsed:false }],
+    apps: [], msgs: [], code: 'QQO1098', sms: {}, announcements: [], ideas: [],
+    gifts: [{name:'🧸 Мишка',price:15},{name:'🎁 Подарок',price:25},{name:'💍 Колечко',price:50},{name:'🚀 Ракета',price:100},{name:'👑 Danilah',price:1000}],
+    starPrices: [{stars:100,price:50},{stars:150,price:100},{stars:200,price:150},{stars:500,price:450},{stars:1000,price:700},{stars:10000,price:'Запросить'}],
+    updates: [{title:'🎉 Запуск',desc:'Danilah запущен!'}]
 };
 function save() { localStorage.setItem('ddb', JSON.stringify(db)); }
 var me = JSON.parse(localStorage.getItem('dme')) || null;
 
-// ========== ОНЛАЙН ==========
-function updateOnline() {
-    var count = db.users.length;
-    var el1 = document.getElementById('onlineCount');
-    var el2 = document.getElementById('onlineCount2');
-    if (el1) el1.textContent = '👥 Онлайн: ' + count;
-    if (el2) el2.textContent = '👥 Онлайн: ' + count;
-}
-
-// ========== НАВИГАЦИЯ ==========
-function showLogin() { hideAll(); document.getElementById('loginPage').classList.add('on'); updateOnline(); }
-function showPhone() { hideAll(); document.getElementById('phonePage').classList.add('on'); }
-function showCode() { hideAll(); document.getElementById('codePage').classList.add('on'); }
-function showAIHelp() { hideAll(); document.getElementById('aiHelpPage').classList.add('on'); }
 function hideAll() {
     var ps = document.querySelectorAll('.page');
     for (var i=0;i<ps.length;i++) ps[i].classList.remove('on');
 }
-function showMain() {
-    hideAll();
-    document.getElementById('mainHeader').style.display = 'flex';
-    document.getElementById('mainContent').style.display = 'block';
-    loadChats();
-    updateOnline();
-}
+function showLogin() { hideAll(); document.getElementById('loginPage').classList.add('on'); }
+function showPhone() { hideAll(); document.getElementById('phonePage').classList.add('on'); }
+function showCode() { hideAll(); document.getElementById('codePage').classList.add('on'); }
+function showAIHelp() { hideAll(); document.getElementById('aiHelpPage').classList.add('on'); }
+function showMain() { hideAll(); document.getElementById('mainHeader').style.display='flex'; document.getElementById('mainContent').style.display='block'; loadChats(); }
 
-// ========== ИИ-ПОМОЩЬ ==========
 function sendAIHelp() {
     var inp = document.getElementById('aiHelpInput');
     var txt = inp.value.trim();
@@ -353,147 +223,112 @@ function sendAIHelp() {
     }, 500);
 }
 
-// ========== МЕНЮ ==========
-function openMenu() {
-    document.getElementById('sidebar').classList.add('open');
-    document.getElementById('overlay').classList.add('show');
-    if (me) {
-        document.getElementById('mAv').textContent = me.emoji || '🐉';
-        document.getElementById('mName').textContent = me.name;
-        document.getElementById('mUser').textContent = me.username;
-        document.getElementById('mStars').textContent = '⭐ ' + (me.stars || 0) + ' звёзд';
-        var b = '';
-        if (me.verified) b += '<span class="badge bv">⭐</span> ';
-        if (me.status === 'premium') b += '<span class="badge bprem">💎</span> ';
-        document.getElementById('mBadges').innerHTML = b;
-        document.getElementById('adminBtn').style.display = me.role === 'owner' ? 'flex' : 'none';
+function sendSMS() {
+    var ph = document.getElementById('phone').value.replace(/\D/g,'');
+    if (ph.length < 10) { alert('Введите номер'); return; }
+    var code = Math.floor(100000 + Math.random() * 900000).toString();
+    db.sms[ph] = code;
+    save();
+    document.getElementById('smsMsg').textContent = '📱 Код: ' + code;
+    var found = null;
+    for (var i=0;i<db.users.length;i++) { if (db.users[i].phone === ph) found = db.users[i]; }
+    if (!found) {
+        found = { id:'u'+Date.now(), name:'Пользователь', username:'@user'+ph.slice(-4), password:'', role:'user', status:'basic', verified:false, emoji:'🐉', phone:ph, stars:0, freeMessageUsed:false };
+        db.users.push(found);
+        save();
     }
-}
-function closeMenu() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('overlay').classList.remove('show');
-}
-function openPage(page) {
-    closeMenu();
-    if (page === 'chats') loadChats();
-    if (page === 'ai') loadAI();
-    if (page === 'contacts') loadContacts();
-    if (page === 'channels') loadChannels();
-    if (page === 'ideas') loadIdeas();
-    if (page === 'calls') loadCalls();
-    if (page === 'settings') loadSettings();
-    if (page === 'about') loadAbout();
-    if (page === 'admin') loadAdmin();
+    me = found;
+    localStorage.setItem('dme', JSON.stringify(me));
+    showMain();
 }
 
-// ========== ЧАТЫ ==========
+function loginWithCode() {
+    var code = document.getElementById('accessCode').value.trim();
+    var user = document.getElementById('loginUser').value.trim();
+    if (!code || !user) { document.getElementById('loginErr').textContent = 'Заполните оба поля'; return; }
+    var found = null;
+    for (var i=0;i<db.users.length;i++) {
+        var u = db.users[i];
+        if (u.username === user && (u.password === code || db.code === code)) found = u;
+    }
+    if (!found) { document.getElementById('loginErr').textContent = 'Неверно'; return; }
+    me = found;
+    localStorage.setItem('dme', JSON.stringify(me));
+    showMain();
+}
+
 function loadChats() {
     var c = document.getElementById('mainContent');
     var h = '<h2 style="color:#a78bfa;">💬 Чаты</h2>';
-    
-    // Объявления от владельца
-    for (var i=0;i<db.announcements.length;i++) {
-        h += '<div class="list-item" onclick="openAnnouncement(' + i + ')"><div class="avatar">📢</div><div style="flex:1;"><b>Объявление</b><p class="sm">' + db.announcements[i].text.substring(0,40) + '...</p></div></div>';
-    }
-    
-    h += '<div class="list-item" onclick="loadAI()"><div class="avatar">🤖</div><div style="flex:1;"><b>Danilah AI</b><p class="sm">Всегда онлайн</p></div></div>';
-    h += '<div class="list-item" onclick="openSupportChat()"><div class="avatar">🛟</div><div style="flex:1;"><b>Поддержка Danilah</b><p class="sm">@Durov</p></div></div>';
-    
-    for (var j=0;j<db.users.length;j++) {
-        var u = db.users[j];
+    h += '<div class="list-item" onclick="loadAI()"><div class="avatar">🤖</div><div style="flex:1;"><b>Danilah AI</b><p class="sm">Помощник</p></div></div>';
+    h += '<div class="list-item" onclick="loadSupport()"><div class="avatar">🛟</div><div style="flex:1;"><b>Поддержка</b><p class="sm">@Durov</p></div></div>';
+    for (var i=0;i<db.users.length;i++) {
+        var u = db.users[i];
         if (u.id !== me.id) {
-            h += '<div class="list-item" onclick="openChat(\'' + u.username + '\',\'' + u.name + '\')"><div class="avatar">' + (u.emoji||'👤') + '</div><div style="flex:1;"><b>' + u.name + '</b> ' + (u.verified?'⭐':'') + (u.status==='premium'?'💎':'') + '<p class="sm">' + u.username + '</p></div></div>';
+            h += '<div class="list-item" onclick="openChat(\'' + u.username + '\',\'' + u.name + '\')"><div class="avatar">' + (u.emoji||'👤') + '</div><div style="flex:1;"><b>' + u.name + '</b><p class="sm">' + u.username + '</p></div></div>';
         }
     }
     c.innerHTML = h;
 }
 
-// ========== ПОДДЕРЖКА ==========
-function openSupportChat() {
-    var c = document.getElementById('mainContent');
-    var h = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2>';
-    h += '<div class="box" style="height:200px;overflow-y:auto;" id="supportBox">';
-    h += '<div class="msg-ai">Выберите готовый вопрос:</div>';
-    h += '</div>';
-    
-    // Заготовленные сообщения
-    var questions = [
-        'Как получить код доступа?',
-        'Как купить звёзды?',
-        'Как получить Premium?',
-        'Сообщить об ошибке',
-        'Другое'
-    ];
-    for (var i=0;i<questions.length;i++) {
-        h += '<button class="bo" onclick="sendSupportQ(\'' + questions[i] + '\')" style="font-size:13px;padding:10px;">' + questions[i] + '</button>';
-    }
-    
-    h += '<button class="bo" onclick="loadChats()">← Назад</button>';
-    c.innerHTML = h;
-}
-
-function sendSupportQ(q) {
-    var box = document.getElementById('supportBox');
-    box.innerHTML += '<div class="msg-user">' + q + '</div>';
-    setTimeout(function() {
-        box.innerHTML += '<div class="msg-ai">✅ Заявка отправлена! @Durov ответит в ближайшее время.</div>';
-        box.scrollTop = box.scrollHeight;
-    }, 300);
-}
-
-// ========== ИИ ==========
 function loadAI() {
     var c = document.getElementById('mainContent');
-    var h = '<h2 style="color:#a78bfa;">🤖 Danilah AI</h2>';
-    h += '<div class="box" style="height:250px;overflow-y:auto;" id="aiChatBox">';
-    h += '<div class="msg-ai">👋 Привет! Я ИИ-помощник. Спроси меня о коде!</div>';
-    h += '</div>';
-    h += '<div style="display:flex;gap:5px;"><input type="text" id="aiInput" placeholder="Спроси..." style="flex:1;"><button class="bp" onclick="sendAI()" style="width:auto;">➤</button></div>';
-    h += '<button class="bo" onclick="loadChats()">← Назад</button>';
-    c.innerHTML = h;
+    c.innerHTML = '<h2 style="color:#a78bfa;">🤖 Danilah AI</h2><div class="box" style="height:200px;overflow-y:auto;" id="aiBox"><div class="msg-ai">👋 Привет! Спроси меня о коде!</div></div><div style="display:flex;gap:5px;"><input type="text" id="aiInput" placeholder="Спроси..." style="flex:1;"><button class="bp" onclick="sendAI()" style="width:auto;">➤</button></div><button class="bo" onclick="loadChats()">← Назад</button>';
 }
 
 function sendAI() {
     var inp = document.getElementById('aiInput');
-    var txt = inp.value.trim().toLowerCase();
+    var txt = inp.value.trim();
     if (!txt) return;
-    var box = document.getElementById('aiChatBox');
+    var box = document.getElementById('aiBox');
     box.innerHTML += '<div class="msg-user">' + txt + '</div>';
+    var q = txt.toLowerCase();
+    var ans = '🤖 Я учусь! Спроси про кнопки, чаты или звёзды.';
+    if (q.indexOf('кнопк') !== -1) ans = '💻 Кнопка: <button onclick="функция()">Текст</button>';
+    if (q.indexOf('привет') !== -1) ans = '👋 Привет! Я ИИ Danilah!';
+    if (q.indexOf('звёзд') !== -1) ans = '⭐ Звёзды — валюта Danilah.';
+    box.innerHTML += '<div class="msg-ai">' + ans + '</div>';
     inp.value = '';
-    var answer = aiAnswer(txt);
-    setTimeout(function() {
-        box.innerHTML += '<div class="msg-ai">' + answer + '</div>';
-        box.scrollTop = box.scrollHeight;
-    }, 400);
 }
 
-function aiAnswer(q) {
-    if (q.indexOf('кнопк') !== -1) return '💻 Кнопка: <button onclick="функция()">Текст</button>';
-    if (q.indexOf('html') !== -1) return '📝 HTML — язык разметки страниц.';
-    if (q.indexOf('css') !== -1) return '🎨 CSS — стили оформления.';
-    if (q.indexOf('чат') !== -1) return '💬 Чат — это сообщения в localStorage.';
-    if (q.indexOf('звёзд') !== -1 || q.indexOf('звезд') !== -1) return '⭐ Звёзды — валюта Danilah. Купить можно в настройках.';
-    if (q.indexOf('премиум') !== -1 || q.indexOf('premium') !== -1) return '💎 Premium — эксклюзивный статус. Пиши @Durov.';
-    if (q.indexOf('привет') !== -1) return '👋 Привет! Я ИИ Danilah!';
-    return '🤖 Я учусь! Спроси про кнопки, чаты, звёзды или Premium.';
-}
-
-// ========== КОНТАКТЫ ==========
-function loadContacts() {
+function loadSupport() {
     var c = document.getElementById('mainContent');
-    var h = '<h2 style="color:#a78bfa;">👥 Контакты</h2>';
-    for (var i=0;i<db.users.length;i++) {
-        var u = db.users[i];
-        h += '<div class="list-item" onclick="openChat(\'' + u.username + '\',\'' + u.name + '\')"><div class="avatar">' + (u.emoji||'👤') + '</div><div style="flex:1;"><b>' + u.name + '</b> ' + (u.verified?'⭐':'') + (u.status==='premium'?'💎':'') + '<p class="sm">' + u.username + '</p></div></div>';
-    }
-    c.innerHTML = h;
+    c.innerHTML = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2><div class="box"><p class="sm">Выберите вопрос:</p></div><button class="bo" onclick="supQ(\'Как получить код?\')">Как получить код?</button><button class="bo" onclick="supQ(\'Как купить звёзды?\')">Как купить звёзды?</button><button class="bo" onclick="supQ(\'Как получить Premium?\')">Как получить Premium?</button><button class="bo" onclick="loadChats()">← Назад</button>';
 }
 
-// ========== КАНАЛЫ ==========
-function loadChannels() {
+function supQ(q) {
+    alert('✅ Заявка отправлена! @Durov ответит.');
+    loadChats();
+}
+
+function openChat(un, name) {
     var c = document.getElementById('mainContent');
-    var h = '<h2 style="color:#a78bfa;">📢 Каналы</h2>';
-    if (me.role === 'owner') {
-        h += '<div class="list-item" onclick="loadAdmin(\'apps\')"><div class="avatar">📋</div><div style="flex:1;"><b>Заявки</b><p class="sm">' + db.apps.length + ' ожидают</p></div></div>';
-    }
-    h += '<div class="list-item" onclick="openChannel(\'news\')"><div class="avata
+    c.innerHTML = '<h2 style="color:#a78bfa;">💬 ' + name + '</h2><div class="box" style="height:200px;overflow-y:auto;" id="chatBox"><p class="sm">Начните переписку...</p></div><div style="display:flex;gap:5px;"><input type="text" id="msgInput" placeholder="Сообщение..." style="flex:1;"><button class="bp" onclick="sendMsg(\'' + un + '\')" style="width:auto;">➤</button></div><button class="bo" onclick="loadChats()">← Назад</button>';
+}
+
+function sendMsg(to) {
+    var inp = document.getElementById('msgInput');
+    var txt = inp.value.trim();
+    if (!txt) return;
+    var box = document.getElementById('chatBox');
+    box.innerHTML += '<p><b>' + me.username + ':</b> ' + txt + '</p>';
+    inp.value = '';
+}
+
+function openMenu() {
+    alert('☰ Меню в разработке');
+}
+
+function logout() {
+    localStorage.removeItem('dme');
+    me = null;
+    document.getElementById('mainHeader').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    hideAll();
+    document.getElementById('welcomePage').classList.add('on');
+}
+
+if (me) { showMain(); } else { document.getElementById('mainHeader').style.display='none'; document.getElementById('mainContent').style.display='none'; }
+</script>
+</body>
+    </html>
