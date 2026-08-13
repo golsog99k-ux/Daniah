@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danilah Elite v8.3</title>
+    <title>Danilah</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:#0a0a12;color:#fff;font-family:Arial,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
         .app{max-width:480px;margin:0 auto;min-height:100vh}
-        .header{background:linear-gradient(135deg,#1a0f2e,#2a1a4e);padding:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #7c3aed}
+        .header{background:#1a0f2e;padding:14px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #7c3aed}
         .logo{font-size:20px;font-weight:800;color:#a78bfa}
         .menu-btn{background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
         .page{display:none}.page.on{display:block}
@@ -63,7 +63,7 @@
         <div style="text-align:center;padding:50px 20px">
             <p style="font-size:70px">🐉</p>
             <h1 style="color:#a78bfa;font-size:26px">DANILAH</h1>
-            <p>Элитный мессенджер</p>
+            <p>Мессенджер</p>
             <p class="sm">Закрытая экосистема @Durov</p>
             <div class="online-badge">👥 Онлайн: 1</div>
             <br><br><button class="bp" onclick="showLogin()">🚀 Начать</button>
@@ -82,7 +82,7 @@
     <div class="page" id="promoPage">
         <div class="content">
             <h2 style="color:#a78bfa">🎫 Активировать промокод</h2>
-            <p class="sm">Введите промокод для получения бонусов</p>
+            <p class="sm">Введите промокод для бонусов</p>
             <input type="text" id="promoInput" placeholder="Промокод">
             <button class="bp" onclick="activatePromo()">Активировать</button>
             <p class="sm" id="promoMsg"></p>
@@ -131,44 +131,7 @@ function showCode(){hideAll();document.getElementById('codePage').classList.add(
 function showPromo(){hideAll();document.getElementById('promoPage').classList.add('on')}
 function showAIHelp(){hideAll();document.getElementById('aiHelpPage').classList.add('on')}
 function showMain(){hideAll();document.getElementById('mainHeader').style.display='flex';document.getElementById('mainContent').style.display='block';loadChats()}
-
-// ПРОМОКОДЫ
-function activatePromo(){
-    var code=document.getElementById('promoInput').value.trim();
-    var msg=document.getElementById('promoMsg');
-    if(!code){msg.textContent='Введите промокод';msg.style.color='#ef4444';return}
-    var promo=db.promos[code];
-    if(!promo){msg.textContent='❌ Неверный промокод';msg.style.color='#ef4444';return}
-    
-    // Проверка не использован ли
-    var userId=me?me.id:'guest';
-    if(db.usedPromos[userId+'_'+code]){msg.textContent='❌ Промокод уже использован';msg.style.color='#ef4444';return}
-    
-    var bonus='';
-    if(promo.type==='tester'){
-        bonus='✅ Тестер! +'+promo.stars+'⭐';
-        if(me){me.stars=(me.stars||0)+promo.stars;me.role=me.role||'tester'}
-    }
-    if(promo.type==='premium'){
-        bonus='✅ Premium на '+promo.days+' дня!';
-        if(me){me.status='premium'}
-    }
-    if(promo.type==='stars'){
-        bonus='✅ +'+promo.stars+'⭐';
-        if(me){me.stars=(me.stars||0)+promo.stars}
-    }
-    
-    db.usedPromos[userId+'_'+code]=true;
-    if(me){
-        for(var i=0;i<db.users.length;i++){if(db.users[i].id===me.id){db.users[i].stars=me.stars;db.users[i].status=me.status;db.users[i].role=me.role;break}}
-        localStorage.setItem('dme',JSON.stringify(me));
-    }
-    save();
-    msg.textContent=bonus;
-    msg.style.color='#22c55e';
-    document.getElementById('promoInput').value='';
-}
-
+function activatePromo(){var code=document.getElementById('promoInput').value.trim();var msg=document.getElementById('promoMsg');if(!code){msg.textContent='Введите промокод';msg.style.color='#ef4444';return}var promo=db.promos[code];if(!promo){msg.textContent='❌ Неверный промокод';msg.style.color='#ef4444';return}var userId=me?me.id:'guest';if(db.usedPromos[userId+'_'+code]){msg.textContent='❌ Уже использован';msg.style.color='#ef4444';return}var bonus='';if(promo.type==='tester'){bonus='✅ Тестер! +'+promo.stars+'⭐';if(me){me.stars=(me.stars||0)+promo.stars;me.role=me.role||'tester'}}if(promo.type==='premium'){bonus='✅ Premium на '+promo.days+' дня!';if(me){me.status='premium'}}if(promo.type==='stars'){bonus='✅ +'+promo.stars+'⭐';if(me){me.stars=(me.stars||0)+promo.stars}}db.usedPromos[userId+'_'+code]=true;if(me){for(var i=0;i<db.users.length;i++){if(db.users[i].id===me.id){db.users[i].stars=me.stars;db.users[i].status=me.status;db.users[i].role=me.role;break}}localStorage.setItem('dme',JSON.stringify(me));}save();msg.textContent=bonus;msg.style.color='#22c55e';document.getElementById('promoInput').value='';}
 function sendAIHelp(){var inp=document.getElementById('aiHelpInput');var txt=inp.value.trim();if(!txt)return;var box=document.getElementById('aiHelpChat');box.innerHTML+='<div class="msg-user">'+txt+'</div>';inp.value='';setTimeout(function(){box.innerHTML+='<div class="msg-ai">✅ Заявка отправлена! @Durov скоро ответит с кодом! 💜</div>';box.scrollTop=box.scrollHeight},500)}
 function sendSMS(){var ph=document.getElementById('phone').value.replace(/\D/g,'');if(ph.length<10){alert('Введите номер');return}var code=Math.floor(100000+Math.random()*900000).toString();db.sms[ph]=code;save();document.getElementById('smsMsg').textContent='📱 Код: '+code;var found=null;for(var i=0;i<db.users.length;i++){if(db.users[i].phone===ph)found=db.users[i]}if(!found){found={id:'u'+Date.now(),name:'Пользователь',username:'@user'+ph.slice(-4),password:'',role:'user',status:'basic',verified:false,emoji:'🐉',phone:ph,stars:0,freeMessageUsed:false};db.users.push(found);save()}me=found;localStorage.setItem('dme',JSON.stringify(me));showMain()}
 function loginWithCode(){var code=document.getElementById('accessCode').value.trim();var user=document.getElementById('loginUser').value.trim();if(!code||!user){document.getElementById('loginErr').textContent='Заполните поля';return}var found=null;for(var i=0;i<db.users.length;i++){var u=db.users[i];if(u.username===user&&(u.password===code||db.code===code))found=u}if(!found){document.getElementById('loginErr').textContent='Неверно';return}me=found;localStorage.setItem('dme',JSON.stringify(me));showMain()}
@@ -190,4 +153,5 @@ function buyPack(s){me.stars=(me.stars||0)+s;for(var i=0;i<db.users.length;i++){
 function sendGift(){var c=document.getElementById('mainContent');var h='<h2 style="color:#a78bfa">🎁 Подарки</h2><p class="sm">⭐ '+(me.stars||0)+'</p>';for(var i=0;i<db.gifts.length;i++){var g=db.gifts[i];h+='<div class="box" style="display:flex;justify-content:space-between"><div><b>'+g.name+'</b><p class="sm">'+g.price+'⭐</p></div><button class="bb" onclick="buyGift(\''+g.name+'\','+g.price+')" style="width:auto;margin:0;padding:10px 16px">Отправить</button></div>'}h+='<button class="bo" onclick="loadSettings()">← Назад</button>';c.innerHTML=h}
 function buyGift(n,p){if((me.stars||0)<p){alert('Не хватает ⭐');return}var t=prompt('Кому? @Username:');if(!t)return;me.stars-=p;for(var i=0;i<db.users.length;i++){if(db.users[i].id===me.id){db.users[i].stars=me.stars;save();break}}localStorage.setItem('dme',JSON.stringify(me));alert('✅ '+n+' → '+t);loadSettings()}
 function activateCode(){var c=prompt('Секретный код:');if(c===db.code){me.verified=true;for(var i=0;i<db.users.length;i++){if(db.users[i].id===me.id){db.users[i].verified=true;break}}save();localStorage.setItem('dme',JSON.stringify(me));alert('✅ Галочка!');loadSettings()}else alert('❌')}
-function givePremium(){var un=prompt('Кому Premium? @Username:');if(!un)return;for(var i=0;i<db.users.length;i++){if(db.users[i].
+function givePremium(){var un=prompt('Кому Premium? @Username:');if(!un)return;for(var i=0;i<db.users.length;i++){if(db.users[i].username===un){db.users[i].status='premium';save();alert('✅');loadSettings();break}}}
+function giveStars(){var un=prompt('Кому звёзды? @Username:');if(!un)return;var am=parseInt(prompt('Сколько ⭐?'));if(!am)return;for(var i=0;i<db.users.length;i++){if(db.users[i].username===un){db.users[i].stars=(db.users[i].st
