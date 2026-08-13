@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danilah Elite v8.0</title>
+    <title>Danilah Elite v8.1</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
@@ -22,6 +22,9 @@
             align-items:center;
             justify-content:space-between;
             border-bottom:2px solid #7c3aed;
+            position:sticky;
+            top:0;
+            z-index:10;
         }
         .logo { font-size:20px; font-weight:800; color:#a78bfa; }
         .menu-btn { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; }
@@ -44,6 +47,7 @@
         .bg { background:#f59e0b; color:#000; }
         .br { background:#ef4444; color:#fff; }
         .bb { background:#06b6d4; color:#000; }
+        .bs { background:#22c55e; color:#000; }
         input {
             display:block;
             width:100%;
@@ -63,6 +67,43 @@
             border:1px solid #2a2a38;
         }
         .sm { font-size:12px; color:#9ca3af; }
+        
+        /* БОКОВОЕ МЕНЮ */
+        .sidebar {
+            position:fixed;
+            top:0;
+            left:-280px;
+            width:270px;
+            height:100vh;
+            background:#141420;
+            z-index:100;
+            transition:left 0.25s;
+            overflow-y:auto;
+        }
+        .sidebar.open { left:0; }
+        .overlay {
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.6);
+            z-index:99;
+            display:none;
+        }
+        .overlay.show { display:block; }
+        .mi {
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:14px 20px;
+            font-size:15px;
+            cursor:pointer;
+            border:none;
+            background:none;
+            color:#fff;
+            width:100%;
+            text-align:left;
+        }
+        .mi:active { background:#2a2a38; }
+        
         .list-item {
             display:flex;
             align-items:center;
@@ -74,6 +115,7 @@
             cursor:pointer;
             border:1px solid #2a2a38;
         }
+        .list-item:active { background:#1e1e2e; }
         .avatar {
             width:46px;
             height:46px;
@@ -110,11 +152,37 @@
             display:inline-block;
             margin:8px 0;
         }
+        .badge { display:inline-block;padding:3px 8px;border-radius:12px;font-size:11px;margin:2px; }
+        .bv { background:rgba(245,158,11,0.2); color:#f59e0b; }
+        .bprem { background:rgba(6,182,212,0.2); color:#06b6d4; }
     </style>
 </head>
 <body>
 
 <div class="app">
+
+    <!-- БОКОВОЕ МЕНЮ -->
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <div style="padding:20px;text-align:center;background:linear-gradient(135deg,#1a0f2e,#2a1a4e);">
+            <div class="avatar" id="mAv" style="margin:0 auto 10px;width:70px;height:70px;font-size:32px;">🐉</div>
+            <b id="mName">Имя</b>
+            <p class="sm" id="mUser">@user</p>
+            <div id="mBadges"></div>
+            <p class="sm" id="mStars" style="color:#f59e0b;">⭐ 0 звёзд</p>
+        </div>
+        <button class="mi" onclick="openPage('chats')">💬 Чаты</button>
+        <button class="mi" onclick="openPage('ai')">🤖 Danilah AI</button>
+        <button class="mi" onclick="openPage('contacts')">👥 Контакты</button>
+        <button class="mi" onclick="openPage('channels')">📢 Каналы</button>
+        <button class="mi" onclick="openPage('ideas')">💡 Чат идей</button>
+        <button class="mi" onclick="openPage('calls')">📞 Звонки</button>
+        <button class="mi" onclick="openPage('settings')">⚙️ Настройки</button>
+        <button class="mi" onclick="openPage('about')">ℹ️ О Danilah</button>
+        <div style="border-top:1px solid #2a2a38;margin:8px 0;"></div>
+        <button class="mi" id="adminBtn" onclick="openPage('admin')" style="display:none;">👑 Админ</button>
+        <button class="mi" onclick="logout()" style="color:#ef4444;">🚪 Выйти</button>
+    </div>
 
     <!-- ШАПКА -->
     <div class="header" id="mainHeader" style="display:none;">
@@ -142,6 +210,7 @@
         <div style="padding:30px 20px;">
             <h2 style="color:#a78bfa;text-align:center;">🐉 DANILAH</h2>
             <p class="sm" style="text-align:center;">Выберите способ входа</p>
+            <div class="online-badge">👥 Онлайн: 1</div>
             <br>
             <button class="bp" onclick="showPhone()">📱 По номеру телефона</button>
             <button class="bo" onclick="showCode()">🔐 По коду</button>
@@ -200,10 +269,7 @@ var db = JSON.parse(localStorage.getItem('ddb')) || {
 function save() { localStorage.setItem('ddb', JSON.stringify(db)); }
 var me = JSON.parse(localStorage.getItem('dme')) || null;
 
-function hideAll() {
-    var ps = document.querySelectorAll('.page');
-    for (var i=0;i<ps.length;i++) ps[i].classList.remove('on');
-}
+function hideAll() { var ps = document.querySelectorAll('.page'); for (var i=0;i<ps.length;i++) ps[i].classList.remove('on'); }
 function showLogin() { hideAll(); document.getElementById('loginPage').classList.add('on'); }
 function showPhone() { hideAll(); document.getElementById('phonePage').classList.add('on'); }
 function showCode() { hideAll(); document.getElementById('codePage').classList.add('on'); }
@@ -217,29 +283,19 @@ function sendAIHelp() {
     var box = document.getElementById('aiHelpChat');
     box.innerHTML += '<div class="msg-user">' + txt + '</div>';
     inp.value = '';
-    setTimeout(function() {
-        box.innerHTML += '<div class="msg-ai">✅ Я уже отправил твою заявку владельцу! @Durov скоро ответит с кодом. Жду не дождусь, пока ты будешь в нашем мессенджере! 💜</div>';
-        box.scrollTop = box.scrollHeight;
-    }, 500);
+    setTimeout(function() { box.innerHTML += '<div class="msg-ai">✅ Заявка отправлена! @Durov скоро ответит с кодом! 💜</div>'; box.scrollTop = box.scrollHeight; }, 500);
 }
 
 function sendSMS() {
     var ph = document.getElementById('phone').value.replace(/\D/g,'');
     if (ph.length < 10) { alert('Введите номер'); return; }
     var code = Math.floor(100000 + Math.random() * 900000).toString();
-    db.sms[ph] = code;
-    save();
+    db.sms[ph] = code; save();
     document.getElementById('smsMsg').textContent = '📱 Код: ' + code;
     var found = null;
     for (var i=0;i<db.users.length;i++) { if (db.users[i].phone === ph) found = db.users[i]; }
-    if (!found) {
-        found = { id:'u'+Date.now(), name:'Пользователь', username:'@user'+ph.slice(-4), password:'', role:'user', status:'basic', verified:false, emoji:'🐉', phone:ph, stars:0, freeMessageUsed:false };
-        db.users.push(found);
-        save();
-    }
-    me = found;
-    localStorage.setItem('dme', JSON.stringify(me));
-    showMain();
+    if (!found) { found = { id:'u'+Date.now(), name:'Пользователь', username:'@user'+ph.slice(-4), password:'', role:'user', status:'basic', verified:false, emoji:'🐉', phone:ph, stars:0, freeMessageUsed:false }; db.users.push(found); save(); }
+    me = found; localStorage.setItem('dme', JSON.stringify(me)); showMain();
 }
 
 function loginWithCode() {
@@ -247,14 +303,39 @@ function loginWithCode() {
     var user = document.getElementById('loginUser').value.trim();
     if (!code || !user) { document.getElementById('loginErr').textContent = 'Заполните оба поля'; return; }
     var found = null;
-    for (var i=0;i<db.users.length;i++) {
-        var u = db.users[i];
-        if (u.username === user && (u.password === code || db.code === code)) found = u;
-    }
+    for (var i=0;i<db.users.length;i++) { var u = db.users[i]; if (u.username === user && (u.password === code || db.code === code)) found = u; }
     if (!found) { document.getElementById('loginErr').textContent = 'Неверно'; return; }
-    me = found;
-    localStorage.setItem('dme', JSON.stringify(me));
-    showMain();
+    me = found; localStorage.setItem('dme', JSON.stringify(me)); showMain();
+}
+
+// МЕНЮ
+function openMenu() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('show');
+    if (me) {
+        document.getElementById('mAv').textContent = me.emoji || '🐉';
+        document.getElementById('mName').textContent = me.name;
+        document.getElementById('mUser').textContent = me.username;
+        document.getElementById('mStars').textContent = '⭐ ' + (me.stars||0) + ' звёзд';
+        var b = '';
+        if (me.verified) b += '<span class="badge bv">⭐</span> ';
+        if (me.status === 'premium') b += '<span class="badge bprem">💎</span> ';
+        document.getElementById('mBadges').innerHTML = b;
+        document.getElementById('adminBtn').style.display = me.role === 'owner' ? 'flex' : 'none';
+    }
+}
+function closeMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+function openPage(page) {
+    closeMenu();
+    if (page === 'chats') loadChats();
+    if (page === 'ai') loadAI();
+    if (page === 'contacts') loadContacts();
+    if (page === 'channels') loadChannels();
+    if (page === 'ideas') loadIdeas();
+    if (page === 'calls') loadCalls();
+    if (page === 'settings') loadSettings();
+    if (page === 'about') loadAbout();
+    if (page === 'admin') loadAdmin();
 }
 
 function loadChats() {
@@ -262,73 +343,70 @@ function loadChats() {
     var h = '<h2 style="color:#a78bfa;">💬 Чаты</h2>';
     h += '<div class="list-item" onclick="loadAI()"><div class="avatar">🤖</div><div style="flex:1;"><b>Danilah AI</b><p class="sm">Помощник</p></div></div>';
     h += '<div class="list-item" onclick="loadSupport()"><div class="avatar">🛟</div><div style="flex:1;"><b>Поддержка</b><p class="sm">@Durov</p></div></div>';
-    for (var i=0;i<db.users.length;i++) {
-        var u = db.users[i];
-        if (u.id !== me.id) {
-            h += '<div class="list-item" onclick="openChat(\'' + u.username + '\',\'' + u.name + '\')"><div class="avatar">' + (u.emoji||'👤') + '</div><div style="flex:1;"><b>' + u.name + '</b><p class="sm">' + u.username + '</p></div></div>';
-        }
-    }
+    for (var i=0;i<db.users.length;i++) { var u = db.users[i]; if (u.id !== me.id) { h += '<div class="list-item" onclick="openChat(\''+u.username+'\',\''+u.name+'\')"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1;"><b>'+u.name+'</b><p class="sm">'+u.username+'</p></div></div>'; } }
     c.innerHTML = h;
 }
 
 function loadAI() {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">🤖 Danilah AI</h2><div class="box" style="height:200px;overflow-y:auto;" id="aiBox"><div class="msg-ai">👋 Привет! Спроси меня о коде!</div></div><div style="display:flex;gap:5px;"><input type="text" id="aiInput" placeholder="Спроси..." style="flex:1;"><button class="bp" onclick="sendAI()" style="width:auto;">➤</button></div><button class="bo" onclick="loadChats()">← Назад</button>';
+    c.innerHTML = '<h2 style="color:#a78bfa;">🤖 Danilah AI</h2><div class="box" style="height:200px;overflow-y:auto;" id="aiBox"><div class="msg-ai">👋 Привет! Спроси меня!</div></div><div style="display:flex;gap:5px;"><input type="text" id="aiInput" placeholder="Спроси..." style="flex:1;"><button class="bp" onclick="sendAI()" style="width:auto;">➤</button></div><button class="bo" onclick="loadChats()">← Назад</button>';
 }
-
 function sendAI() {
-    var inp = document.getElementById('aiInput');
-    var txt = inp.value.trim();
-    if (!txt) return;
-    var box = document.getElementById('aiBox');
-    box.innerHTML += '<div class="msg-user">' + txt + '</div>';
-    var q = txt.toLowerCase();
-    var ans = '🤖 Я учусь! Спроси про кнопки, чаты или звёзды.';
+    var inp = document.getElementById('aiInput'); var txt = inp.value.trim();
+    if (!txt) return; var box = document.getElementById('aiBox');
+    box.innerHTML += '<div class="msg-user">'+txt+'</div>';
+    var q = txt.toLowerCase(); var ans = '🤖 Я учусь!';
     if (q.indexOf('кнопк') !== -1) ans = '💻 Кнопка: <button onclick="функция()">Текст</button>';
-    if (q.indexOf('привет') !== -1) ans = '👋 Привет! Я ИИ Danilah!';
+    if (q.indexOf('привет') !== -1) ans = '👋 Привет!';
     if (q.indexOf('звёзд') !== -1) ans = '⭐ Звёзды — валюта Danilah.';
-    box.innerHTML += '<div class="msg-ai">' + ans + '</div>';
-    inp.value = '';
+    box.innerHTML += '<div class="msg-ai">'+ans+'</div>'; inp.value = '';
 }
 
 function loadSupport() {
     var c = document.getElementById('mainContent');
     c.innerHTML = '<h2 style="color:#a78bfa;">🛟 Поддержка</h2><div class="box"><p class="sm">Выберите вопрос:</p></div><button class="bo" onclick="supQ(\'Как получить код?\')">Как получить код?</button><button class="bo" onclick="supQ(\'Как купить звёзды?\')">Как купить звёзды?</button><button class="bo" onclick="supQ(\'Как получить Premium?\')">Как получить Premium?</button><button class="bo" onclick="loadChats()">← Назад</button>';
 }
+function supQ(q) { alert('✅ Заявка отправлена! @Durov ответит.'); loadChats(); }
 
-function supQ(q) {
-    alert('✅ Заявка отправлена! @Durov ответит.');
-    loadChats();
-}
-
-function openChat(un, name) {
+function loadContacts() {
     var c = document.getElementById('mainContent');
-    c.innerHTML = '<h2 style="color:#a78bfa;">💬 ' + name + '</h2><div class="box" style="height:200px;overflow-y:auto;" id="chatBox"><p class="sm">Начните переписку...</p></div><div style="display:flex;gap:5px;"><input type="text" id="msgInput" placeholder="Сообщение..." style="flex:1;"><button class="bp" onclick="sendMsg(\'' + un + '\')" style="width:auto;">➤</button></div><button class="bo" onclick="loadChats()">← Назад</button>';
+    var h = '<h2 style="color:#a78bfa;">👥 Контакты</h2>';
+    for (var i=0;i<db.users.length;i++) { var u = db.users[i]; h += '<div class="list-item" onclick="openChat(\''+u.username+'\',\''+u.name+'\')"><div class="avatar">'+(u.emoji||'👤')+'</div><div style="flex:1;"><b>'+u.name+'</b><p class="sm">'+u.username+'</p></div></div>'; }
+    c.innerHTML = h;
 }
 
-function sendMsg(to) {
-    var inp = document.getElementById('msgInput');
-    var txt = inp.value.trim();
-    if (!txt) return;
-    var box = document.getElementById('chatBox');
-    box.innerHTML += '<p><b>' + me.username + ':</b> ' + txt + '</p>';
-    inp.value = '';
+function loadChannels() {
+    var c = document.getElementById('mainContent');
+    var h = '<h2 style="color:#a78bfa;">📢 Каналы</h2>';
+    if (me.role === 'owner') h += '<div class="list-item" onclick="loadAdmin(\'apps\')"><div class="avatar">📋</div><div style="flex:1;"><b>Заявки</b><p class="sm">'+db.apps.length+' ожидают</p></div></div>';
+    h += '<div class="list-item" onclick="loadAbout()"><div class="avatar">📰</div><div style="flex:1;"><b>Новости Danilah</b><p class="sm">Обновления</p></div></div>';
+    c.innerHTML = h;
 }
 
-function openMenu() {
-    alert('☰ Меню в разработке');
+function loadIdeas() {
+    var c = document.getElementById('mainContent');
+    var h = '<h2 style="color:#a78bfa;">💡 Чат идей</h2><input type="text" id="ideaInput" placeholder="Ваша идея..."><button class="bp" onclick="addIdea()">Отправить</button>';
+    for (var i=0;i<db.ideas.length;i++) h += '<div class="box"><b>'+db.ideas[i].user+'</b><p>'+db.ideas[i].text+'</p></div>';
+    h += '<button class="bo" onclick="loadChats()">← Назад</button>';
+    c.innerHTML = h;
 }
+function addIdea() { var txt = document.getElementById('ideaInput').value.trim(); if (!txt) return; db.ideas.push({user:me.username,text:txt}); save(); loadIdeas(); }
 
-function logout() {
-    localStorage.removeItem('dme');
-    me = null;
-    document.getElementById('mainHeader').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'none';
-    hideAll();
-    document.getElementById('welcomePage').classList.add('on');
+function loadCalls() {
+    var c = document.getElementById('mainContent');
+    c.innerHTML = '<h2 style="color:#a78bfa;">📞 Звонки</h2><div class="box" style="text-align:center;"><p style="font-size:50px;">📞</p><button class="bp" onclick="startCall()">📞 Аудио</button><button class="bb" onclick="startCall()">📹 Видео</button><p class="sm" id="callStatus"></p></div><button class="bo" onclick="loadChats()">← Назад</button>';
 }
+function startCall() { document.getElementById('callStatus').textContent = '📞 Вызов...'; setTimeout(function(){ document.getElementById('callStatus').textContent = '📞 Разговор...'; }, 2000); setTimeout(function(){ document.getElementById('callStatus').textContent = '📞 Завершён'; }, 5000); }
 
-if (me) { showMain(); } else { document.getElementById('mainHeader').style.display='none'; document.getElementById('mainContent').style.display='none'; }
-</script>
-</body>
-    </html>
+function loadSettings() {
+    var c = document.getElementById('mainContent');
+    var h = '<h2 style="color:#a78bfa;">⚙️ Настройки</h2>';
+    h += '<div class="box" style="text-align:center;"><p style="font-size:50px;">'+(me.emoji||'🐉')+'</p><b>'+me.name+'</b> '+(me.verified?'⭐':'')+(me.status==='premium'?'💎':'')+'<p class="sm">'+me.username+'</p><p style="color:#f59e0b;font-size:18px;">⭐ '+(me.stars||0)+' звёзд</p></div>';
+    h += '<button class="bg" onclick="buyStars()">⭐ Купить звёзды</button>';
+    h += '<button class="bb" onclick="sendGift()">🎁 Подарки</button>';
+    h += '<button class="bp" onclick="activateCode()">🎫 Активировать код</button>';
+    if (me.role === 'owner') { h += '<button class="bb" onclick="givePremium()">💎 Выдать Premium</button><button class="bg" onclick="giveStars()">⭐ Выдать звёзды</button><button class="bp" onclick="sendAnnouncement()">📢 Рассылка</button>'; }
+    else { h += '<button class="bo" onclick="alert(\'💎 Свяжитесь с @Durov\')">💎 Хочу Premium</button>'; }
+    h += '<button class="br" onclick="logout()">🚪 Выйти</button>';
+    c.innerHTML = h;
+    
